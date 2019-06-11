@@ -1,3 +1,11 @@
 from django.db import models
 
-# Create your models here.
+
+class File(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+    size = models.CharField(max_length=50)
+    url = models.URLField()
+    downloadable_at = models.DateTimeField()
+    downloadable_during = models.DurationField()
+    created_at = models.DateTimeField(auto_now_add=True)
