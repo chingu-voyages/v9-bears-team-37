@@ -7,10 +7,6 @@ verify_ssl = true
 autopep8 = "*"
 
 [packages]
-certifi = "*"
-pipenv = "*"
-virtualenv = "*"
-virtualenv-clone = "*"
 django = "*"
 graphene-django = "*"
 django-graphql-jwt = "*"
