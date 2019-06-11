@@ -11,4 +11,4 @@ class Query(graphene.ObjectType):
     files = graphene.List(FileType)
 
     def resolve_files(self, info):
-        return File.object.all()
+        return File.objects.all()
