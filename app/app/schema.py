@@ -3,7 +3,7 @@ import files.schema
 import users.schema
 
 
-class Query(files.schema.Query, graphene.ObjectType):
+class Query(users.schema.Query, files.schema.Query, graphene.ObjectType):
     pass
 
 
