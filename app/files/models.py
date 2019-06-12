@@ -7,5 +7,5 @@ class File(models.Model):
     size = models.CharField(max_length=50)
     url = models.URLField()
     downloadable_at = models.DateTimeField()
-    downloadable_during = models.DurationField()
+    downloadable_during = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
