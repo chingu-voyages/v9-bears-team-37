@@ -26,7 +26,11 @@ class CreateFile(graphene.Mutation):
         downloadable_during = graphene.String()
 
     def mutate(self, info, **kwargs):
+        user = info.context.user
 
+        if user.is_anonymous:
+            raise Exception('Log in to add a file!')
+        
         name = kwargs.get('name')
         description = kwargs.get('description')
         size = kwargs.get('size')
@@ -36,8 +40,7 @@ class CreateFile(graphene.Mutation):
 
         file = File(name=name, description=description, 
             size=size, url=url, downloadable_at=downloadable_at, 
-            downloadable_during=downloadable_during)
-        # file = File(kwargs)
+            downloadable_during=downloadable_during, posted_by=user)
         file.save()
         return CreateFile(file=file)
 
