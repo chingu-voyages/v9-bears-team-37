@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 class UserType(DjangoObjectType):
     class Meta:
         model = get_user_model()
+        # only_fields = ('id', 'email', 'password', 'username', 'dateJoined')
 
 
 class CreateUser(graphene.Mutation):
@@ -22,6 +23,7 @@ class CreateUser(graphene.Mutation):
         )
         user.set_password(password)
         user.save()
+        return CreateUser(user=user)
 
 
 class Mutation(graphene.ObjectType):
