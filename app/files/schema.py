@@ -45,6 +45,34 @@ class CreateFile(graphene.Mutation):
         return CreateFile(file=file)
 
 
+class UpdateFile(graphene.Mutation):
+    file = graphene.Field(FileType)
+
+    class Arguments:
+        file_id = graphene.Int(required=True)
+        name = graphene.String()
+        description = graphene.String()
+        size = graphene.String()
+        url = graphene.String()
+        downloadable_at = graphene.DateTime()
+        downloadable_during = graphene.String()
+    
+    def mutate(self, info, **kwargs):
+        user = info.context.user
+        file = File.objects.get(id=kwargs.get("file_id"))
+
+        if file.posted_by != user:
+            raise Exception('Not permitted to update this file!')
+        
+        file.name = kwargs.get('name')
+        file.description = kwargs.get('description')
+        file.size = kwargs.get('size')
+        file.url = kwargs.get('url')
+        file.downloadable_at = kwargs.get('downloadable_at')
+        file.downloadable_during = kwargs.get('downloadable_during')
+        file.save()
+        return UpdateFile(file=file)
+
 class Mutation(graphene.ObjectType):
     create_file = CreateFile.Field()
-
+    update_file = UpdateFile.Field()
