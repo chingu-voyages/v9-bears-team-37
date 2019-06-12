@@ -73,6 +73,27 @@ class UpdateFile(graphene.Mutation):
         file.save()
         return UpdateFile(file=file)
 
+
+class DeleteFile(graphene.Mutation):
+    file_id = graphene.Int()
+
+    class Arguments:
+        file_id = graphene.Int(required=True)
+    
+    
+    def mutate(self, info, file_id):
+        user = info.context.user
+        file = File.objects.get(id=file_id)
+
+        if file.posted_by != user:
+            raise Exception('Not permitted to delete the file.')
+        
+        file.delete()
+
+        return DeleteFile(file_id=file_id)
+
+
 class Mutation(graphene.ObjectType):
     create_file = CreateFile.Field()
     update_file = UpdateFile.Field()
+    delete_file = DeleteFile.Field()
