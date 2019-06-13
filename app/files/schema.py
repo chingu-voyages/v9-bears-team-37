@@ -2,6 +2,7 @@ import graphene
 from graphene_django import DjangoObjectType
 from .models import File
 
+
 class FileType(DjangoObjectType):
     class Meta:
         model = File
@@ -30,7 +31,7 @@ class CreateFile(graphene.Mutation):
 
         if user.is_anonymous:
             raise Exception('Log in to add a file!')
-        
+
         name = kwargs.get('name')
         description = kwargs.get('description')
         size = kwargs.get('size')
@@ -38,9 +39,9 @@ class CreateFile(graphene.Mutation):
         downloadable_at = kwargs.get('downloadable_at')
         downloadable_during = kwargs.get('downloadable_during')
 
-        file = File(name=name, description=description, 
-            size=size, url=url, downloadable_at=downloadable_at, 
-            downloadable_during=downloadable_during, posted_by=user)
+        file = File(name=name, description=description,
+                    size=size, url=url, downloadable_at=downloadable_at,
+                    downloadable_during=downloadable_during, posted_by=user)
         file.save()
         return CreateFile(file=file)
 
@@ -56,14 +57,14 @@ class UpdateFile(graphene.Mutation):
         url = graphene.String()
         downloadable_at = graphene.DateTime()
         downloadable_during = graphene.String()
-    
+
     def mutate(self, info, **kwargs):
         user = info.context.user
         file = File.objects.get(id=kwargs.get("file_id"))
 
         if file.posted_by != user:
             raise Exception('Not permitted to update this file!')
-        
+
         file.name = kwargs.get('name')
         file.description = kwargs.get('description')
         file.size = kwargs.get('size')
@@ -79,15 +80,14 @@ class DeleteFile(graphene.Mutation):
 
     class Arguments:
         file_id = graphene.Int(required=True)
-    
-    
+
     def mutate(self, info, file_id):
         user = info.context.user
         file = File.objects.get(id=file_id)
 
         if file.posted_by != user:
             raise Exception('Not permitted to delete the file.')
-        
+
         file.delete()
 
         return DeleteFile(file_id=file_id)
