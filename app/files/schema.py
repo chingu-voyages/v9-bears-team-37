@@ -1,5 +1,6 @@
 import graphene
 from graphene_django import DjangoObjectType
+from graphql import GraphQLError
 from .models import File
 
 class FileType(DjangoObjectType):
@@ -29,7 +30,7 @@ class CreateFile(graphene.Mutation):
         user = info.context.user
 
         if user.is_anonymous:
-            raise Exception('Log in to add a file!')
+            raise GraphQLError('Log in to add a file!')
         
         name = kwargs.get('name')
         description = kwargs.get('description')
@@ -62,7 +63,7 @@ class UpdateFile(graphene.Mutation):
         file = File.objects.get(id=kwargs.get("file_id"))
 
         if file.posted_by != user:
-            raise Exception('Not permitted to update this file!')
+            raise GraphQLError('Not permitted to update this file!')
         
         file.name = kwargs.get('name')
         file.description = kwargs.get('description')
@@ -86,7 +87,7 @@ class DeleteFile(graphene.Mutation):
         file = File.objects.get(id=file_id)
 
         if file.posted_by != user:
-            raise Exception('Not permitted to delete the file.')
+            raise GraphQLError('Not permitted to delete the file.')
         
         file.delete()
 
