@@ -55,6 +55,7 @@ class UpdateFile(graphene.Mutation):
         description = graphene.String()
         size = graphene.String()
         url = graphene.String()
+        # can you check this. DateTime needs option. Without option. and we dont need downloadable_at query
         downloadable_at = graphene.DateTime()
         downloadable_during = graphene.String()
 
