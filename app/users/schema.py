@@ -2,10 +2,12 @@ import graphene
 from graphene_django import DjangoObjectType
 from django.contrib.auth import get_user_model
 
+
 class UserType(DjangoObjectType):
     class Meta:
         model = get_user_model()
         # only_fields = ('id', 'email', 'password', 'username', 'dateJoined')
+        # I think we should use the only_fields option
 
 
 class Query(graphene.ObjectType):
@@ -14,7 +16,7 @@ class Query(graphene.ObjectType):
 
     def resolve_user(self, info, id):
         return get_user_model().objects.get(id=id)
-    
+
     def resolve_me(self, info):
         user = info.context.user
         if user.is_anonymous:

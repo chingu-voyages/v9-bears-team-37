@@ -3,15 +3,19 @@ from graphene_django import DjangoObjectType
 from graphql import GraphQLError
 from .models import File
 
+
 class FileType(DjangoObjectType):
     class Meta:
         model = File
 
 
 class Query(graphene.ObjectType):
-    files = graphene.List(FileType)
+    files = graphene.List(FileType, search=graphene.String())
 
-    def resolve_files(self, info):
+    def resolve_files(self, info, search=None):
+        if search:
+            return File.objects.filter(name__startswith=search)
+
         return File.objects.all()
 
 
@@ -30,8 +34,8 @@ class CreateFile(graphene.Mutation):
         user = info.context.user
 
         if user.is_anonymous:
-            raise GraphQLError('Log in to add a file!')
-        
+            raise Exception('Log in to add a file!')
+
         name = kwargs.get('name')
         description = kwargs.get('description')
         size = kwargs.get('size')
@@ -39,9 +43,9 @@ class CreateFile(graphene.Mutation):
         downloadable_at = kwargs.get('downloadable_at')
         downloadable_during = kwargs.get('downloadable_during')
 
-        file = File(name=name, description=description, 
-            size=size, url=url, downloadable_at=downloadable_at, 
-            downloadable_during=downloadable_during, posted_by=user)
+        file = File(name=name, description=description,
+                    size=size, url=url, downloadable_at=downloadable_at,
+                    downloadable_during=downloadable_during, posted_by=user)
         file.save()
         return CreateFile(file=file)
 
@@ -55,16 +59,17 @@ class UpdateFile(graphene.Mutation):
         description = graphene.String()
         size = graphene.String()
         url = graphene.String()
+        # can you check this. DateTime needs option. Without option it throws error. and we dont need downloadable_at query
         downloadable_at = graphene.DateTime()
         downloadable_during = graphene.String()
-    
+
     def mutate(self, info, **kwargs):
         user = info.context.user
         file = File.objects.get(id=kwargs.get("file_id"))
 
         if file.posted_by != user:
-            raise GraphQLError('Not permitted to update this file!')
-        
+            raise Exception('Not permitted to update this file!')
+
         file.name = kwargs.get('name')
         file.description = kwargs.get('description')
         file.size = kwargs.get('size')
@@ -80,15 +85,14 @@ class DeleteFile(graphene.Mutation):
 
     class Arguments:
         file_id = graphene.Int(required=True)
-    
-    
+
     def mutate(self, info, file_id):
         user = info.context.user
         file = File.objects.get(id=file_id)
 
         if file.posted_by != user:
-            raise GraphQLError('Not permitted to delete the file.')
-        
+            raise Exception('Not permitted to delete the file.')
+
         file.delete()
 
         return DeleteFile(file_id=file_id)
