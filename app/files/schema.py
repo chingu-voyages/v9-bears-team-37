@@ -9,9 +9,12 @@ class FileType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
-    files = graphene.List(FileType)
+    files = graphene.List(FileType, search=graphene.String())
 
-    def resolve_files(self, info):
+    def resolve_files(self, info, search=None):
+        if search:
+            return File.objects.filter(name__startswith=search)
+
         return File.objects.all()
 
 
