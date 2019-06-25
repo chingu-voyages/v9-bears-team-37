@@ -1,8 +1,10 @@
 # Python virtual environment
+pyenv/
 env/
+.env/
 
 # Python files and folders
-*__pycache__/
+__pycache__/
 *.py[cod]
 
 
