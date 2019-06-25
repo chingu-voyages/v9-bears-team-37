@@ -1,17 +1,19 @@
+from django.contrib.auth import get_user_model
+
 import graphene
 from graphene_django import DjangoObjectType
-from django.contrib.auth import get_user_model
+from graphql import GraphQLError
 
 
 class UserType(DjangoObjectType):
     class Meta:
         model = get_user_model()
-        # only_fields = ('id', 'email', 'password', 'username', 'dateJoined')
-        # I think we should use the only_fields option
+        #only_fields = ('id', 'email', 'password', 'username')
 
 
 class Query(graphene.ObjectType):
     user = graphene.Field(UserType, id=graphene.Int(required=True))
+
     me = graphene.Field(UserType)
 
     def resolve_user(self, info, id):
@@ -20,7 +22,8 @@ class Query(graphene.ObjectType):
     def resolve_me(self, info):
         user = info.context.user
         if user.is_anonymous:
-            raise Exception('Not logged in!')
+            raise GraphQLError('Not logged in')
+
         return user
 
 
