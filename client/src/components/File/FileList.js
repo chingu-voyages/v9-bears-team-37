@@ -1,13 +1,23 @@
 import React from 'react';
 import { Query } from 'react-apollo';
 import { gql } from 'apollo-boost';
-import { ListGroup, Tab, Row, Col, Button } from 'react-bootstrap';
 import UpdateFile from './UpdateFile';
 import DeleteFile from './DeleteFile';
 import ShowError from '../Common/ShowError';
 import Loading from '../Common/Loading';
+import withStyles from '@material-ui/core/styles/withStyles';
+import List from '@material-ui/core/List';
+import { Link } from 'react-router-dom';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Typography from '@material-ui/core/Typography';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-const FileList = ({ dlfiles }) => {
+const FileList = ({ dlfiles, classes }) => {
   // const id = match.params.id;
   //console.log(id);
   console.log(window);
@@ -19,37 +29,55 @@ const FileList = ({ dlfiles }) => {
   //       if (error) return <ShowError />;
   //       console.log({ data });
   return (
-    <Tab.Container id="list-group-tabs-example" defaultActiveKey="#link1">
-      {console.log(dlfiles)}
-      {dlfiles.map((dlfile, i) => (
-        <Row key={dlfile.id}>
-          <Col sm={4}>
-            <ListGroup>
-              <ListGroup.Item action href={`#${dlfile.id}`}>
-                <span>{i + 1}</span> {dlfile.name}
-              </ListGroup.Item>
-            </ListGroup>
-          </Col>
-          <Col>
-            <Tab.Content>
-              <Tab.Pane eventKey={`#${dlfile.id}`}>
-                <Row>
-                  {dlfile.description}
-                  <Col>
-                    <UpdateFile dlfile={dlfile} />
-                    <DeleteFile dlfile={dlfile} />
-                  </Col>
-                </Row>
-              </Tab.Pane>
-            </Tab.Content>
-          </Col>
-        </Row>
+    <List>
+      {dlfiles.map(dlfile => (
+        <ExpansionPanel key={dlfile.id}>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <ListItem className={classes.root}>
+              <ListItemText
+                primaryTypographyProps={{
+                  variant: 'subheading',
+                  color: 'primary'
+                }}
+                primary={dlfile.title}
+                secondary={
+                  <Link
+                    className={classes.link}
+                    to={`/profile/${dlfile.postedBy.id}`}
+                  >
+                    {dlfile.postedBy.username}
+                  </Link>
+                }
+              />
+            </ListItem>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails className={classes.details}>
+            <Typography variant="body1">{dlfile.description}</Typography>
+          </ExpansionPanelDetails>
+          <ExpansionPanelActions>
+            <UpdateFile dlfile={dlfile} />
+            <DeleteFile dlfile={dlfile} />
+          </ExpansionPanelActions>
+        </ExpansionPanel>
       ))}
-    </Tab.Container>
-    //     );
-    //   }}
-    // </Query>
+    </List>
   );
+};
+const styles = {
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap'
+  },
+  details: {
+    alignItems: 'center'
+  },
+  link: {
+    color: '#424242',
+    textDecoration: 'none',
+    '&:hover': {
+      color: 'black'
+    }
+  }
 };
 
 const PROFILE_QYERY = gql`
@@ -68,4 +96,4 @@ const PROFILE_QYERY = gql`
   }
 `;
 
-export default FileList;
+export default withStyles(styles)(FileList);
