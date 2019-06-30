@@ -163,7 +163,7 @@ const UpdateFile = ({ dlfile, classes }) => {
                   <DialogActions>
                     <Button
                       disabled={submitting}
-                      onClick={() => setReveal(false)}
+                      onClick={() => handleCancel()}
                       className={classes.cancel}
                     >
                       Cancel
