@@ -30,7 +30,7 @@ const NavBar = ({ currentUser, classes }) => {
 
         {/* Auth User Info */}
         {currentUser && (
-          <Link to={`/profile/${currentUser.id}`} className={classes.grow}>
+          <Link to={`/`} className={classes.grow}>
             <FaceIcon className={classes.faceIcon} />
             <Typography variant="headline" className={classes.username} noWrap>
               {currentUser.username}

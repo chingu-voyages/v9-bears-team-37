@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Query } from 'react-apollo';
 import { gql } from 'apollo-boost';
 import UpdateFile from './UpdateFile';
@@ -17,7 +17,15 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
+import { UserContext } from '../../App';
+
 const FileList = ({ dlfiles, classes }) => {
+  const currentUser = useContext(UserContext);
+  //console.log(currentUser.id);
+  let userFiles = dlfiles.filter(
+    dlfile => currentUser.id === dlfile.postedBy.id
+  );
+  console.log(userFiles);
   // const id = match.params.id;
   //console.log(id);
   console.log(window);
@@ -30,7 +38,7 @@ const FileList = ({ dlfiles, classes }) => {
   //       console.log({ data });
   return (
     <List>
-      {dlfiles.map(dlfile => (
+      {userFiles.map(dlfile => (
         <ExpansionPanel key={dlfile.id}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <ListItem className={classes.root}>
@@ -39,15 +47,15 @@ const FileList = ({ dlfiles, classes }) => {
                   variant: 'subheading',
                   color: 'primary'
                 }}
-                primary={dlfile.title}
-                secondary={
-                  <Link
-                    className={classes.link}
-                    to={`/profile/${dlfile.postedBy.id}`}
-                  >
-                    {dlfile.postedBy.username}
-                  </Link>
-                }
+                primary={dlfile.name}
+                // secondary={
+                //   <Link
+                //     className={classes.link}
+                //     to={`/profile/${dlfile.postedBy.id}`}
+                //   >
+                //     {dlfile.postedBy.username}
+                //   </Link>
+                // }
               />
             </ListItem>
           </ExpansionPanelSummary>
