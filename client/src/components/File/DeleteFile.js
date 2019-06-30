@@ -21,7 +21,9 @@ const DeleteFile = ({ dlfile }) => {
       >
         {deleteDlfile => (
           <>
-            <Button onClick={deleteDlfile}>Delete</Button>
+            <Button variant="danger" onClick={deleteDlfile}>
+              Delete
+            </Button>
           </>
         )}
       </Mutation>
