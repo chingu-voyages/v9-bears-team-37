@@ -18,7 +18,7 @@ const Login = ({ classes, setNewUser }) => {
   return (
     <div>
       <Card style={{ width: '18rem', border: 'none' }}>
-        <Card.Img variant="top" src="holder.js/100px180" />
+        <Card.Img variant='top' src='holder.js/100px180' />
         <Card.Body>
           <Card.Title>
             <h3>Login</h3>
@@ -29,28 +29,28 @@ const Login = ({ classes, setNewUser }) => {
           {(authToken, { loading, error, called, client }) => {
             return (
               <Form onSubmit={e => handleSubmit(e, authToken, client)}>
-                <Form.Group controlId="formBasicEmail">
+                <Form.Group controlId='formBasicEmail'>
                   <Form.Label>User Name</Form.Label>
                   <Form.Control
                     //id="name"
-                    type="text"
-                    placeholder="Enter User Name"
+                    type='text'
+                    placeholder='Enter User Name'
                     onChange={e => setUsername(e.target.value)}
                   />
                 </Form.Group>
 
-                <Form.Group controlId="formBasicPassword">
+                <Form.Group controlId='formBasicPassword'>
                   <Form.Label>Password</Form.Label>
                   <Form.Control
                     //id="password"
-                    type="password"
-                    placeholder="Password"
+                    type='password'
+                    placeholder='Password'
                     onChange={e => setPassword(e.target.value)}
                   />
                 </Form.Group>
                 <Button
-                  variant="primary"
-                  type="submit"
+                  variant='primary'
+                  type='submit'
                   block
                   disabled={loading || !username.trim() || !password.trim()}
                 >
@@ -58,7 +58,7 @@ const Login = ({ classes, setNewUser }) => {
                 </Button>
                 <Button
                   block
-                  onClick={() => setNewUser(false)}
+                  onClick={() => setNewUser(true)}
                   style={{
                     backgroundColor: 'transparent',
                     border: 'none',

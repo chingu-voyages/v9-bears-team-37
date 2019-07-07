@@ -5,8 +5,8 @@ import { gql } from 'apollo-boost';
 import ShowError from '../Common/ShowError';
 import Loading from '../Common/Loading';
 import { ListGroup, Tab, Row, Col, Button } from 'react-bootstrap';
-import UpdateTrack from '../File/UpdateFile';
-import DeleteTrack from '../File/DeleteFile';
+import UpdateFile from '../File/UpdateFile';
+import DeleteFile from '../File/DeleteFile';
 
 const Profile = ({ match }) => {
   const id = match.params.id;
@@ -19,7 +19,7 @@ const Profile = ({ match }) => {
         //console.log({ data });
 
         return (
-          <Tab.Container id="list-group-tabs-example" defaultActiveKey="#link1">
+          <Tab.Container id='list-group-tabs-example' defaultActiveKey='#link1'>
             {data.user.dlfileSet.map((pdlfile, i) => (
               <Row key={pdlfile.id}>
                 <Col sm={4}>
@@ -35,8 +35,8 @@ const Profile = ({ match }) => {
                       <Row>
                         {pdlfile.description}
                         {/* <Col>
-                          <UpdateTrack />
-                          <DeleteTrack />
+                          <UpdateFile />
+                          <DeleteFile />
                         </Col> */}
                       </Row>
                     </Tab.Pane>

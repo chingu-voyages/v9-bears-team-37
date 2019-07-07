@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Login from './Login';
 import Register from './Register';
 
-const index = () => {
+const Index = () => {
   const [newUser, setNewUser] = useState(true);
   return newUser ? (
     <Register setNewUser={setNewUser} />
@@ -12,4 +12,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

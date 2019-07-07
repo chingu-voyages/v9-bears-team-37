@@ -85,8 +85,8 @@ const CreateFile = ({ classes }) => {
     <>
       <Button
         fullWidth
-        variant="outlined"
-        color="primary"
+        variant='outlined'
+        color='primary'
         onClick={() => setReveal(true)}
         style={reveal === false ? { display: 'block' } : { display: 'none' }}
       >
@@ -117,8 +117,8 @@ const CreateFile = ({ classes }) => {
                   </DialogContentText>
                   <FormControl fullWidth>
                     <TextField
-                      label="Title"
-                      placeholder="Add Title"
+                      label='Title'
+                      placeholder='Add Title'
                       onChange={event => setName(event.target.value)}
                       value={name}
                       className={classes.textField}
@@ -127,9 +127,9 @@ const CreateFile = ({ classes }) => {
                   <FormControl fullWidth>
                     <TextField
                       multiline
-                      rows="4"
-                      label="Description"
-                      placeholder="Add Description"
+                      rows='4'
+                      label='Description'
+                      placeholder='Add Description'
                       onChange={event => setDescription(event.target.value)}
                       value={description}
                       className={classes.textField}
@@ -137,18 +137,18 @@ const CreateFile = ({ classes }) => {
                   </FormControl>
                   <FormControl error={Boolean(sizeError)}>
                     <input
-                      id="audio"
+                      id='audio'
                       required
-                      type="file"
+                      type='file'
                       //accept="audio/mp3,audio/wav"
                       className={classes.input}
                       onChange={handleFileupload}
                     />
-                    <label htmlFor="audio">
+                    <label htmlFor='audio'>
                       <Button
-                        variant="outlined"
+                        variant='outlined'
                         color={file ? 'secondary' : 'inherit'}
-                        component="span"
+                        component='span'
                         className={classes.button}
                       >
                         File
@@ -171,13 +171,13 @@ const CreateFile = ({ classes }) => {
                     disabled={
                       submitting || !name.trim() || !description.trim() || !file
                     }
-                    type="submit"
+                    type='submit'
                     className={classes.save}
                   >
                     {submitting ? (
                       <CircularProgress className={classes.save} size={24} />
                     ) : (
-                      'Create Track'
+                      'Create File'
                     )}
                   </Button>
                 </DialogActions>
@@ -217,7 +217,7 @@ const styles = theme => ({
     maxWidth: 550
   },
   textField: {
-    margin: theme.spacing.unit
+    margin: theme.spacing()
   },
   cancel: {
     color: 'red'
@@ -226,18 +226,18 @@ const styles = theme => ({
     color: 'green'
   },
   button: {
-    margin: theme.spacing.unit * 2
+    margin: theme.spacing(2)
   },
   icon: {
-    marginLeft: theme.spacing.unit
+    marginLeft: theme.spacing()
   },
   input: {
     display: 'none'
   },
   fab: {
     position: 'fixed',
-    bottom: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 2,
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
     zIndex: '200'
   }
 });
