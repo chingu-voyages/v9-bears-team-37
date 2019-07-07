@@ -29,6 +29,8 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = []
 
 # Email Settings
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='')
+EMAIL_BACKEND = config('EMAIL_BACKEND', default='')
 EMAIL_HOST = config('EMAIL_HOST', default='localhost')
 EMAIL_PORT = config('EMAIL_PORT', default=25, cast=int)
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
@@ -47,7 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'graphene_django',
-    'dlfiles'
+    'dlfiles',
+    'helpers'
 ]
 
 GRAPHENE = {
