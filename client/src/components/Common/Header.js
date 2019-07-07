@@ -23,7 +23,7 @@ const NavBar = ({ currentUser, classes }) => {
         {/* Title / Logo */}
         <Link to='/' className={classes.grow}>
           <UploadIcon className={classes.logo} color='secondary' />
-          <Typography variant='headline' color='secondary' noWrap>
+          <Typography variant='subtitle1' color='secondary' noWrap>
             Upload
           </Typography>
         </Link>
@@ -32,7 +32,7 @@ const NavBar = ({ currentUser, classes }) => {
         {currentUser && (
           <Link to={`/`} className={classes.grow}>
             <FaceIcon className={classes.faceIcon} />
-            <Typography variant='headline' className={classes.username} noWrap>
+            <Typography variant='subtitle2' className={classes.username} noWrap>
               {currentUser.username}
             </Typography>
           </Link>
