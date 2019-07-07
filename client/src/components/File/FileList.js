@@ -44,7 +44,7 @@ const FileList = ({ dlfiles, classes }) => {
             <ListItem className={classes.root}>
               <ListItemText
                 primaryTypographyProps={{
-                  variant: 'subheading',
+                  variant: 'inherit',
                   color: 'primary'
                 }}
                 primary={dlfile.name}
@@ -60,7 +60,7 @@ const FileList = ({ dlfiles, classes }) => {
             </ListItem>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails className={classes.details}>
-            <Typography variant="body1">{dlfile.description}</Typography>
+            <Typography variant='body1'>{dlfile.description}</Typography>
           </ExpansionPanelDetails>
           <ExpansionPanelActions>
             <UpdateFile dlfile={dlfile} />
