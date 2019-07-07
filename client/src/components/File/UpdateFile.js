@@ -111,15 +111,15 @@ const UpdateFile = ({ dlfile, classes }) => {
             return (
               <Dialog open={reveal} className={classes.dialog}>
                 <form onSubmit={event => handleSubmit(event, updateDlfile)}>
-                  <DialogTitle>Update Track</DialogTitle>
+                  <DialogTitle>Update File</DialogTitle>
                   <DialogContent>
                     <DialogContentText>
                       Add a Title, Description & File (Under 15MB)
                     </DialogContentText>
                     <FormControl fullWidth>
                       <TextField
-                        label="Title"
-                        placeholder="Add Title"
+                        label='Title'
+                        placeholder='Add Title'
                         onChange={event => setName(event.target.value)}
                         value={name}
                         className={classes.textField}
@@ -128,9 +128,9 @@ const UpdateFile = ({ dlfile, classes }) => {
                     <FormControl fullWidth>
                       <TextField
                         multiline
-                        rows="4"
-                        label="Description"
-                        placeholder="Add Description"
+                        rows='4'
+                        label='Description'
+                        placeholder='Add Description'
                         onChange={event => setDescription(event.target.value)}
                         value={description}
                         className={classes.textField}
@@ -138,18 +138,18 @@ const UpdateFile = ({ dlfile, classes }) => {
                     </FormControl>
                     <FormControl error={Boolean(sizeError)}>
                       <input
-                        id="audio"
+                        id='audio'
                         required
-                        type="file"
+                        type='file'
                         //accept="audio/mp3,audio/wav"
                         className={classes.input}
                         onChange={handleFileupload}
                       />
-                      <label htmlFor="audio">
+                      <label htmlFor='audio'>
                         <Button
-                          variant="outlined"
+                          variant='outlined'
                           color={file ? 'secondary' : 'inherit'}
-                          component="span"
+                          component='span'
                           className={classes.button}
                         >
                           File
@@ -175,13 +175,13 @@ const UpdateFile = ({ dlfile, classes }) => {
                         !description.trim() ||
                         !file
                       }
-                      type="submit"
+                      type='submit'
                       className={classes.save}
                     >
                       {submitting ? (
                         <CircularProgress className={classes.save} size={24} />
                       ) : (
-                        'Update Track'
+                        'Update File'
                       )}
                     </Button>
                   </DialogActions>

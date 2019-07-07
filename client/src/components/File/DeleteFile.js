@@ -12,7 +12,7 @@ const DeleteFile = ({ dlfile }) => {
   return (
     isCurrentUser && (
       <Mutation
-        mutation={DELETE_TRACK_MUTATION}
+        mutation={DELETE_FILE_MUTATION}
         variables={{ dlfileId: dlfile.id }}
         onCompleted={data => {
           console.log(data);
@@ -21,7 +21,7 @@ const DeleteFile = ({ dlfile }) => {
       >
         {deleteDlfile => (
           <>
-            <Button variant="danger" onClick={deleteDlfile}>
+            <Button variant='danger' onClick={deleteDlfile}>
               Delete
             </Button>
           </>
@@ -31,7 +31,7 @@ const DeleteFile = ({ dlfile }) => {
   );
 };
 
-const DELETE_TRACK_MUTATION = gql`
+const DELETE_FILE_MUTATION = gql`
   mutation($dlfileId: Int!) {
     deleteDlfile(dlfileId: $dlfileId) {
       dlfileId
