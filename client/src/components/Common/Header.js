@@ -10,14 +10,6 @@ import Typography from '@material-ui/core/Typography';
 
 const NavBar = ({ currentUser, classes }) => {
   return (
-    // <Navbar bg="dark" variant="dark">
-    //   <Navbar.Brand>
-    //     {currentUser && (
-    //       <Link to={`/profile/${currentUser.id}`}>{currentUser.username}</Link>
-    //     )}
-    //     <Signout />
-    //   </Navbar.Brand>
-    // </Navbar>
     <AppBar position='static' className={classes.root}>
       <Toolbar>
         {/* Title / Logo */}
