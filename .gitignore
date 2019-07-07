@@ -1,7 +1,9 @@
 # Python virtual environment
 pyenv/
 env/
-.env/
+
+# Environment variables file
+.env
 
 # Python files and folders
 __pycache__/
