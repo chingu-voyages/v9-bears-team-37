@@ -227,7 +227,7 @@ const styles = theme => ({
     maxWidth: 550
   },
   textField: {
-    margin: theme.spacing.unit
+    margin: theme.spacing()
   },
   cancel: {
     color: 'red'
@@ -236,10 +236,10 @@ const styles = theme => ({
     color: 'green'
   },
   button: {
-    margin: theme.spacing.unit * 2
+    margin: theme.spacing(2)
   },
   icon: {
-    marginLeft: theme.spacing.unit
+    marginLeft: theme.spacing()
   },
   input: {
     display: 'none'
