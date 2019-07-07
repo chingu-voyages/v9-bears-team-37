@@ -29,7 +29,7 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = []
 
 # Email Settings
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='')
+DEFAULT_FROM_EMAIL = config('EMAIL_HOST_USER', default='')
 EMAIL_BACKEND = config('EMAIL_BACKEND', default='')
 EMAIL_HOST = config('EMAIL_HOST', default='localhost')
 EMAIL_PORT = config('EMAIL_PORT', default=25, cast=int)
