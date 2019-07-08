@@ -20,7 +20,7 @@ const Register = ({ setNewUser }) => {
       accept: 'application/json',
       'content-type': 'application/json'
     };
-    const body = JSON.stringify({ email: email });
+    const body = JSON.stringify({ username, email });
     fetch(`${API_URL}/email`, {
       method: 'POST',
       headers,
