@@ -7,8 +7,8 @@ from django.template.loader import render_to_string
 def index(request):
     name = "Picklu"
     text_message = render_to_string('email/message.txt', {'name': name})
-    html_message = render_to_string('email/message/email.html', {'name': name})
-    
+    html_message = render_to_string('email/message.html', {'name': name})
+
     result = send_mail(
         subject="Hello, there",
         message=text_message,
