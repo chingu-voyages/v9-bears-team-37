@@ -17,6 +17,6 @@ def index(request):
         recipient_list=['picklumithu@gmail.com'],
         fail_silently=False)
     if result:
-        return render(request, 'send/success.html')
+        return render(request, 'response/success.html')
     else:
-        return render(request, 'send/fail.html')
+        return render(request, 'response/fail.html')
