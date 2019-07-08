@@ -48,14 +48,6 @@ const FileList = ({ dlfiles, classes }) => {
                   color: 'primary'
                 }}
                 primary={dlfile.name}
-                // secondary={
-                //   <Link
-                //     className={classes.link}
-                //     to={`/profile/${dlfile.postedBy.id}`}
-                //   >
-                //     {dlfile.postedBy.username}
-                //   </Link>
-                // }
               />
             </ListItem>
           </ExpansionPanelSummary>
