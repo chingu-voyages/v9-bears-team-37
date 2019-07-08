@@ -49,9 +49,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'graphene_django',
+    'users.apps.UsersConfig',
     'verification',
     'dlfiles',
 ]
+
+AUTH_USER_MODEL = 'users.User'
 
 GRAPHENE = {
     'SCHEMA': 'app.schema.schema',
