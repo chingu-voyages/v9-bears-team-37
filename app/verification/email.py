@@ -1,26 +1,40 @@
 from django.conf import settings
-from django.shortcuts import render
+from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 
+@csrf_exempt
 def collect_email(request):
-    name = "Picklu"
-    text_message = render_to_string('email/message.txt', {'name': name})
-    html_message = render_to_string('email/message.html', {'name': name})
+    if request.method == 'GET':
+        return JsonResponse({'msg': 'Not a valid method!'})
+
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    name = body.get('username', 'there')
+    email = body.get('email', '')
+    if not email:
+        JsonResponse({'msg': 'Email id was not found!'})
+
+    text_message = render_to_string('email/message.txt', {'name': name, 'id': 7})
+    html_message = render_to_string('email/message.html', {'name': name, 'id': 7})
 
     result = send_mail(
-        subject="Hello, there",
+        subject="Verify your email",
         message=text_message,
         html_message=html_message,
         from_email=settings.EMAIL_HOST_USER,
-        recipient_list=['picklumithu@gmail.com'],
+        recipient_list=[email],
         fail_silently=False)
+
     if result:
-        return render(request, 'response/success.html')
-    else:
-        return render(request, 'response/fail.html')
+        return JsonResponse({
+            'name': name, 'email': email, 'msg': 'Email collection was successfull!'
+        })
+    return JsonResponse({'msg': 'Something went wrong!'})
 
 
-def confirm_email(request):
+def confirm_email(request, id):
     pass
