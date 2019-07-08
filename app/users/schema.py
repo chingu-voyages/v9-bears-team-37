@@ -1,14 +1,13 @@
-from django.contrib.auth import get_user_model
-
 import graphene
 from graphene_django import DjangoObjectType
 from graphql import GraphQLError
 
+from .models import User
+
 
 class UserType(DjangoObjectType):
     class Meta:
-        model = get_user_model()
-        #only_fields = ('id', 'email', 'password', 'username')
+        model = User
 
 
 class Query(graphene.ObjectType):
@@ -17,7 +16,7 @@ class Query(graphene.ObjectType):
     me = graphene.Field(UserType)
 
     def resolve_user(self, info, id):
-        return get_user_model().objects.get(id=id)
+        return User.objects.get(id=id)
 
     def resolve_me(self, info):
         user = info.context.user
@@ -36,7 +35,7 @@ class CreateUser(graphene.Mutation):
         email = graphene.String(required=True)
 
     def mutate(self, info, username, password, email):
-        user = get_user_model()(
+        user = User(
             username=username,
             email=email
         )
