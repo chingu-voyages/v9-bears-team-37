@@ -3,7 +3,22 @@ from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
+from string import Template
 import json
+import requests
+
+
+queryTemplate = Template(
+    """"
+{
+    user(email: $email) {
+        id
+        username
+        email
+        isVerified
+    }
+}"""
+)
 
 
 @csrf_exempt
@@ -18,22 +33,33 @@ def collect_email(request):
     if not email:
         JsonResponse({'msg': 'Email id was not found!'})
 
-    text_message = render_to_string('email/message.txt', {'name': name, 'id': 7})
-    html_message = render_to_string('email/message.html', {'name': name, 'id': 7})
+    query = queryTemplate.substitute(email=email)
 
-    result = send_mail(
-        subject="Verify your email",
-        message=text_message,
-        html_message=html_message,
-        from_email=settings.EMAIL_HOST_USER,
-        recipient_list=[email],
-        fail_silently=False)
+    response = requests.post(
+        'http://localhost:8000',
+        json={'query': query}
+    )
+    if response.status_code == 200:
+        return JsonResponse(response.json())
+    else:
+        return JsonResponse({'msg': 'Something went wrong in the query!'})
 
-    if result:
-        return JsonResponse({
-            'name': name, 'email': email, 'msg': 'Email collection was successfull!'
-        })
-    return JsonResponse({'msg': 'Something went wrong!'})
+    # text_message = render_to_string('email/message.txt', {'name': name, 'id': 7})
+    # html_message = render_to_string('email/message.html', {'name': name, 'id': 7})
+
+    # result = send_mail(
+    #     subject="Verify your email",
+    #     message=text_message,
+    #     html_message=html_message,
+    #     from_email=settings.EMAIL_HOST_USER,
+    #     recipient_list=[email],
+    #     fail_silently=False)
+
+    # if result:
+    #     return JsonResponse({
+    #         'name': name, 'email': email, 'msg': 'Email collection was successfull!'
+    #     })
+    # return JsonResponse({'msg': 'Something went wrong!'})
 
 
 def confirm_email(request, id):
