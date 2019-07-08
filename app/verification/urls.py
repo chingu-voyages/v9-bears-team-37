@@ -1,5 +1,5 @@
 from django.urls import path
-from helpers import email
+from verification import email
 
 urlpatterns = [
     path('', email.index)

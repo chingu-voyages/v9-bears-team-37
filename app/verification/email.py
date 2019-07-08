@@ -9,6 +9,6 @@ def index(request):
         message="Hello, Picklu",
         html_message='<html><body><p>Hello there, This is an <b>automated</b> html email.</p></body></html>',
         from_email=settings.EMAIL_HOST_USER,
-        recipient_list=['picklumithu@gmail.com', 'subrata.kku@gmail.com'],
+        recipient_list=['picklumithu@gmail.com'],
         fail_silently=False)
     return render(request, 'send/index.html')
