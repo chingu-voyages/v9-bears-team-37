@@ -1,1 +1,1 @@
-Hello {{ name }}, This is an automated text mail.
+Hello {{ name }}, This is an automated text message.
