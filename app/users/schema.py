@@ -11,12 +11,19 @@ class UserType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
-    user = graphene.Field(UserType, id=graphene.Int(required=True))
+    user = graphene.Field(
+        UserType, id=graphene.Int(required=False),
+        email=graphene.String(required=False))
 
     me = graphene.Field(UserType)
 
-    def resolve_user(self, info, id):
-        return User.objects.get(id=id)
+    def resolve_user(self, info, id=None, email=None):
+        if id:
+            return User.objects.get(id=id)
+        elif email:
+            return User.objects.get(email=email)
+        else:
+            raise GraphQLError('Either id or email should be provided in the argument')
 
     def resolve_me(self, info):
         user = info.context.user

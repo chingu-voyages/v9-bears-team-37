@@ -1,1 +1,5 @@
-Hello {{ name }}, This is an automated text message.
+Hello {{ name }}, 
+
+Verify your email by clicking link "http://localhost:8000/email/{{ id }}"
+
+Thank you for trying HyperFlashDrive
