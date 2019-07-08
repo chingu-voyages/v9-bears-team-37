@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Mutation } from 'react-apollo';
 import { gql } from 'apollo-boost';
 import Error from '../Common/ShowError';
+import { API_URL } from '../../config';
 
 import { Card, Form, Button, Alert, Toast } from 'react-bootstrap';
 
@@ -14,11 +15,28 @@ const Register = ({ setNewUser }) => {
   const handleSubmit = (e, createUser) => {
     e.preventDefault();
     createUser();
+
+    const headers = {
+      accept: 'application/json',
+      'content-type': 'application/json'
+    };
+    const body = JSON.stringify({ email: email });
+    fetch(`${API_URL}/email`, {
+      method: 'POST',
+      headers,
+      body
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data.msg);
+      })
+      .catch(err => console.log(err));
   };
+
   return (
     <div>
       <Card style={{ width: '18rem', border: 'none' }}>
-        <Card.Img variant="top" src="holder.js/100px180" />
+        <Card.Img variant='top' src='holder.js/100px180' />
         <Card.Body>
           <Card.Title>
             <h3>Register</h3>
@@ -29,44 +47,44 @@ const Register = ({ setNewUser }) => {
           mutation={REGISTER_MUTATION}
           variables={{ username, email, password }}
           onCompleted={data => {
-            console.log({ data });
+            // console.log({ data });
             setReveal(true);
           }}
         >
           {(createUser, { loading, error }) => {
             return (
               <Form onSubmit={e => handleSubmit(e, createUser)}>
-                <Form.Group controlId="formBasicEmail">
+                <Form.Group controlId='formBasicEmail'>
                   <Form.Label>User Name</Form.Label>
                   <Form.Control
                     //id="name"
-                    type="text"
-                    placeholder="Enter User Name"
+                    type='text'
+                    placeholder='Enter User Name'
                     onChange={e => setUsername(e.target.value)}
                   />
                 </Form.Group>
-                <Form.Group controlId="formBasicEmail">
+                <Form.Group controlId='formBasicEmail'>
                   <Form.Label>Email address</Form.Label>
                   <Form.Control
                     // id="email"
-                    type="email"
-                    placeholder="Enter email"
+                    type='email'
+                    placeholder='Enter email'
                     onChange={e => setEmail(e.target.value)}
                   />
                 </Form.Group>
 
-                <Form.Group controlId="formBasicPassword">
+                <Form.Group controlId='formBasicPassword'>
                   <Form.Label>Password</Form.Label>
                   <Form.Control
                     //id="password"
-                    type="password"
-                    placeholder="Password"
+                    type='password'
+                    placeholder='Password'
                     onChange={e => setPassword(e.target.value)}
                   />
                 </Form.Group>
                 <Button
-                  variant="primary"
-                  type="submit"
+                  variant='primary'
+                  type='submit'
                   block
                   disabled={
                     loading ||

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 //import { Button, Toast, Form, Row, Col } from 'react-bootstrap';
 import { Mutation } from 'react-apollo';
 import { gql } from 'apollo-boost';
@@ -6,6 +6,8 @@ import axios from 'axios';
 import { GET_DLFILES_QUERY } from '../pages/Root';
 
 import ShowError from '../Common/ShowError';
+
+import { UserContext, ME_QUERY } from '../../App';
 
 import withStyles from '@material-ui/core/styles/withStyles';
 import Dialog from '@material-ui/core/Dialog';
@@ -23,6 +25,8 @@ import ClearIcon from '@material-ui/icons/Clear';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 
 const CreateFile = ({ classes }) => {
+  const currentUser = useContext(UserContext);
+
   const [reveal, setReveal] = useState(false);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -89,8 +93,11 @@ const CreateFile = ({ classes }) => {
         color='primary'
         onClick={() => setReveal(true)}
         style={reveal === false ? { display: 'block' } : { display: 'none' }}
+        disabled={!currentUser.isVerified}
       >
-        Upload
+        {currentUser.isVerified
+          ? 'Upload'
+          : 'Verify your email to upload files'}
       </Button>
       <Mutation
         mutation={CREATE_DLFILE_MUTATION}

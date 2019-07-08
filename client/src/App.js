@@ -37,6 +37,7 @@ const ME_QUERY = gql`
       id
       username
       email
+      isVerified
     }
   }
 `;
