@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 
-def index(request):
+def collect_email(request):
     name = "Picklu"
     text_message = render_to_string('email/message.txt', {'name': name})
     html_message = render_to_string('email/message.html', {'name': name})
@@ -20,3 +20,7 @@ def index(request):
         return render(request, 'response/success.html')
     else:
         return render(request, 'response/fail.html')
+
+
+def confirm_email(request):
+    pass
