@@ -4,7 +4,7 @@ import Login from './Login';
 import Register from './Register';
 
 const Index = () => {
-  const [newUser, setNewUser] = useState(true);
+  const [newUser, setNewUser] = useState(false);
   return newUser ? (
     <Register setNewUser={setNewUser} />
   ) : (

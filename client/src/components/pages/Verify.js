@@ -1,42 +1,41 @@
-import React from 'react';
-import { Query } from 'react-apollo';
-import { gql } from 'apollo-boost';
-
-import FileList from '../File/FileList';
-import CreateFile from '../File/CreateFile';
+import React, { useEffect, useState } from 'react';
+import { Redirect } from 'react-router-dom';
+import { sendEmail } from '../helpers';
 import Loading from '../Common/Loading';
 import ShowError from '../Common/ShowError';
-import { Row, Col } from 'react-bootstrap';
+import Button from '@material-ui/core/Button';
 
-const Confirm = () => {
+const Confirm = props => {
+  const [redirect, setRedirect] = useState(false);
+
+  const { id } = props.match.params;
+
+  const renderReidrect = () => {
+    if (redirect) {
+      return <Redirect to='/' />;
+    }
+  };
+
+  const handleSendEmail = id => {
+    const payload = { id };
+    const endpoint = `email/confirm/${id}`;
+    sendEmail(payload, endpoint);
+    setRedirect(true);
+  };
+
   return (
     <div>
-      <CreateFile />
-      <Query query={GET_DLFILES_QUERY}>
-        {({ data, loading, error }) => {
-          if (loading) return <Loading />;
-          //if (error) return <ShowError error={error} />;
-
-          return <FileList dlfiles={data.dlfiles} id={data.dlfiles.postedBy} />;
-        }}
-      </Query>
+      {renderReidrect()}
+      <Button
+        fullWidth
+        variant='outlined'
+        color='primary'
+        onClick={() => handleSendEmail(id)}
+      >
+        Verify your email
+      </Button>
     </div>
   );
 };
-
-export const GET_DLFILES_QUERY = gql`
-  query getDlfilesQuery {
-    dlfiles {
-      id
-      name
-      description
-      url
-      postedBy {
-        id
-        username
-      }
-    }
-  }
-`;
 
 export default Confirm;

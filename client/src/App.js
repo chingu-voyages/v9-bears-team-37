@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import NavBar from './components/Common/Header';
 import { Query } from 'react-apollo';
 import { gql } from 'apollo-boost';
 import Verify from './components/pages/Verify';
@@ -17,12 +16,11 @@ const App = ({ currentUser }) => (
       if (loading) return <Loading />;
       if (error) return <ShowError error={error} />;
       const currentUser = data.me;
-      console.log(currentUser);
+      // console.log(currentUser);
 
       return (
         <Router>
           <UserContext.Provider value={currentUser}>
-            <NavBar fixed='top' currentUser={currentUser} />
             <Switch>
               <Route exact path='/' component={Root} />
               <Route exact path='/email/:id' component={Verify} />
