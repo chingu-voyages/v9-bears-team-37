@@ -3,22 +3,25 @@ from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
-from string import Template
+from gql import gql, Client
+from gql.transport import requests
 import json
-import requests
 
 
-queryTemplate = Template(
-    """"
-{
-    user(email: $email) {
-        id
-        username
-        email
-        isVerified
-    }
-}"""
-)
+query = gql(
+    """query($email: String!){
+        user(email: $email) {
+            id
+            username
+            email
+            isVerified
+        }
+}""")
+
+def run_query(variables):
+    transport = requests.RequestsHTTPTransport(url='http://localhost:8000/graphql/')
+    client = Client(transport=transport)
+    return client.execute(query, variables)
 
 
 @csrf_exempt
@@ -28,24 +31,27 @@ def collect_email(request):
 
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
-    name = body.get('username', 'there')
+    username = body.get('username', 'there')
     email = body.get('email', '')
     if not email:
         JsonResponse({'msg': 'Email id was not found!'})
-
-    query = queryTemplate.substitute(email=email)
-
-    response = requests.post(
-        'http://localhost:8000',
-        json={'query': query}
-    )
+    
+    try:
+        variables = {
+            "email": email
+        }
+        response = run_query(variables)
+    except Exception as e:
+        print(e)
+        return JsonResponse({'error': 'Failed to send request to graphql'})
+    
     if response.status_code == 200:
         return JsonResponse(response.json())
     else:
-        return JsonResponse({'msg': 'Something went wrong in the query!'})
+        return JsonResponse({'msg': 'Something went wrong in the query!', 'status_code': response.status_code})
 
-    # text_message = render_to_string('email/message.txt', {'name': name, 'id': 7})
-    # html_message = render_to_string('email/message.html', {'name': name, 'id': 7})
+    # text_message = render_to_string('email/message.txt', {'name': username, 'id': 7})
+    # html_message = render_to_string('email/message.html', {'name': username, 'id': 7})
 
     # result = send_mail(
     #     subject="Verify your email",
