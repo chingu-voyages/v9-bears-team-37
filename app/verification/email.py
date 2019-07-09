@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
-from app.schema import Query
+from app.schema import Query, Mutation
 
 
 query = """
@@ -15,6 +15,16 @@ query = """
             username
             email
             isVerified
+        }
+    }"""
+
+mutation = """
+    mutation($userId: Int!, $isVerified: Boolean) {
+        updateUser(userId: $userId, isVerified: $isVerified) {
+            user {
+                id
+                isVerified
+            }
         }
     }"""
 
@@ -57,3 +67,28 @@ def collect_email(request):
             return JsonResponse(data)
     else:
         return JsonResponse({'msg': 'User not found!'})
+
+
+@csrf_exempt
+def confirm_email(request):
+    if request.method == 'GET':
+        return JsonResponse({'msg': 'Not a valid method!'})
+
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode).get('user', {})
+    userId = int(body.get('id', '0'))
+    username = body.get('username')
+    schema = graphene.Schema(mutation=Mutation)
+    response = schema.execute(
+        mutation,
+        variables={"userId": userId, "isVerified": True},
+        context_value={'username': username}
+    )
+
+    data = response.to_dict()
+    print(data)
+    return JsonResponse({'msg': 'done!'})
+    # if data['user']:
+    #     return JsonResponse({'msg': 'Email has been activated successfully!'})
+    # else:
+    #     return JsonResponse({'msg': 'User not found!'})
