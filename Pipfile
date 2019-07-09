@@ -13,8 +13,6 @@ graphene-django = "*"
 django-graphql-jwt = "*"
 django-cors-headers = "*"
 python-decouple = "*"
-gql = "*"
-requests = "*"
 
 [requires]
 python_version = "3.7"
