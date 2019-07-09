@@ -1,9 +1,22 @@
+import graphene
+import json
 from django.conf import settings
 from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
-import json
+from app.schema import Query
+
+
+query = """
+    query($email: String!){
+        user(email: $email) {
+            id
+            username
+            email
+            isVerified
+        }
+    }"""
 
 
 @csrf_exempt
@@ -13,27 +26,37 @@ def collect_email(request):
 
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
-    name = body.get('username', 'there')
+    username = body.get('username', 'there')
     email = body.get('email', '')
-    if not email:
-        JsonResponse({'msg': 'Email id was not found!'})
 
-    text_message = render_to_string('email/message.txt', {'name': name, 'id': 7})
-    html_message = render_to_string('email/message.html', {'name': name, 'id': 7})
+    schema = graphene.Schema(query=Query)
+    response = schema.execute(query, variables={"email": email})
 
-    result = send_mail(
-        subject="Verify your email",
-        message=text_message,
-        html_message=html_message,
-        from_email=settings.EMAIL_HOST_USER,
-        recipient_list=[email],
-        fail_silently=False)
+    data = response.to_dict()['data']
 
-    if result:
-        return JsonResponse({
-            'name': name, 'email': email, 'msg': 'Email collection was successfull!'
-        })
-    return JsonResponse({'msg': 'Something went wrong!'})
+    if data['user']:
+
+        user = data['user']
+        if user['isVerified']:
+            return JsonResponse({'msg': 'User is already verified!'})
+
+        # User is found and the user's email is not verified
+        id = user['id']
+        text_message = render_to_string('email/message.txt', {'name': username, 'id': id})
+        html_message = render_to_string('email/message.html', {'name': username, 'id': id})
+
+        result = send_mail(
+            subject="Email verification for HyperFlashDrive",
+            message=text_message,
+            html_message=html_message,
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[email],
+            fail_silently=False)
+
+        if result:
+            return JsonResponse(data)
+    else:
+        return JsonResponse({'msg': 'User not found!'})
 
 
 def confirm_email(request, id):
