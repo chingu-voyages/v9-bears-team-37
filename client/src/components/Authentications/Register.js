@@ -1,42 +1,29 @@
 import React, { useState } from 'react';
 import { Mutation } from 'react-apollo';
 import { gql } from 'apollo-boost';
-import axios from 'axios';
+import { sendEmail } from '../helpers';
 import Error from '../Common/ShowError';
-import { API_URL } from '../../config';
+
 
 import { Card, Form, Button, Alert, Toast } from 'react-bootstrap';
+
+
 
 const Register = ({ setNewUser }) => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [reveal, setReveal] = useState(false);
-  const [sendingEmail, setSendingEmail] = useState(false);
 
   const handleSubmit = (e, createUser) => {
     e.preventDefault();
     createUser();
   };
 
-  const handleSendEmail = () => {
-    setSendingEmail({ sendingEmail: true });
-    axios
-      .post(
-        `${API_URL}/email/`,
-        { username, email },
-        {
-          headers: {
-            'content-type': 'application/json;charset=UTF-8'
-          }
-        }
-      )
-      .then(data => {
-        setSendingEmail({ sendingEmail: false });
-        console.log(data);
-      })
-      .catch(err => console.log(err));
-  };
+  const handleSendEmail = (username, email) => {
+    const payload = {username, email};
+    sendEmail(payload);
+  }
 
   return (
     <div>
@@ -125,7 +112,7 @@ const Register = ({ setNewUser }) => {
             <Button block onClick={() => setNewUser(false)}>
               Login
             </Button>
-            <Button block onClick={handleSendEmail}>
+            <Button block onClick={() => handleSendEmail(username, email)}>
               Verify Email
             </Button>
           </Toast.Body>

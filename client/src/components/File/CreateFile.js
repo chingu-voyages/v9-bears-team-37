@@ -8,6 +8,7 @@ import { GET_DLFILES_QUERY } from '../pages/Root';
 import ShowError from '../Common/ShowError';
 
 import { UserContext, ME_QUERY } from '../../App';
+import { sendEmail } from '../helpers';
 
 import withStyles from '@material-ui/core/styles/withStyles';
 import Dialog from '@material-ui/core/Dialog';
@@ -26,7 +27,6 @@ import AttachFileIcon from '@material-ui/icons/AttachFile';
 
 const CreateFile = ({ classes }) => {
   const currentUser = useContext(UserContext);
-
   const [reveal, setReveal] = useState(false);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -85,6 +85,11 @@ const CreateFile = ({ classes }) => {
     setFile('');
   };
 
+  const handleSendEmail = (username, email) => {
+    const payload = {username, email};
+    sendEmail(payload);
+  }
+
   return (
     <>
       <Button
@@ -98,6 +103,15 @@ const CreateFile = ({ classes }) => {
         {currentUser.isVerified
           ? 'Upload'
           : 'Verify your email to upload files'}
+      </Button>
+      <Button
+        fullWidth
+        variant='outlined'
+        color='primary'
+        onClick={() => handleSendEmail(currentUser.username, currentUser.email)}
+        style={currentUser.isVerified ? { display: 'none' } : { display: 'block' }}
+      >
+        Verify your email
       </Button>
       <Mutation
         mutation={CREATE_DLFILE_MUTATION}
