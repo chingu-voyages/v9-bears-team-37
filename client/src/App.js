@@ -42,6 +42,19 @@ const ME_QUERY = gql`
   }
 `;
 
+const USER_UPDATE_QUERY = gql`
+  {
+    mutation($id: Int!, $isVerified: Boolean!){
+        userUPdate(id: $id, isVerified: $isVerified) {
+            id
+            username
+            email
+            isVerified
+        }
+    }
+  }`;
+
+
 // const GET_DLFILES_QUERY = gql`
 //   {
 //     dlfiles {
