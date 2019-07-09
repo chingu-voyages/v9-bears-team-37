@@ -52,24 +52,27 @@ class CreateUser(graphene.Mutation):
 
 
 class UpdateUser(graphene.Mutation):
-    file = graphene.Field(UserType)
+    user = graphene.Field(UserType)
 
     class Arguments:
         user_id = graphene.Int(required=True)
         username = graphene.String()
         password = graphene.String()
-        isVerified = graphene.Boolean()
+        is_verified = graphene.Boolean()
 
-    def mutate(self, info, **kwargs):
+    def mutate(self, info, user_id, username=None,
+               password=None, is_verified=None):
         loggedInUser = info.context.user
-        user = User.objects.get(id=kwargs.get("user_id"))
+        user = User.objects.get(id=user_id)
 
         if user != loggedInUser:
             raise Exception('Not permitted to update this user!')
-
-        user.username = kwargs.get('username')
-        user.set_password(kwargs.get('password'))
-        user.isVerified = kwargs.get('isVerified')
+        if username:
+            user.username = username
+        if password:
+            user.set_password(password)
+        if is_verified:
+            user.is_verified = is_verified
         user.save()
 
         return UpdateUser(user=user)
