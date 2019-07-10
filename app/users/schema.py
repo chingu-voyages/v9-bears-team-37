@@ -72,6 +72,8 @@ class UpdateUser(graphene.Mutation):
         if password:
             user.set_password(password)
         if is_verified:
+            if user.is_verified:
+                raise Exception('Your email is already verified!')
             user.is_verified = is_verified
         user.save()
 
