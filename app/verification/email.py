@@ -1,12 +1,14 @@
 import graphene
 import json
-from .helpers import generate_token
+
 from django.conf import settings
 from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from app.schema import Query
+
+from .helpers import generate_token
 
 
 query = """
@@ -43,8 +45,8 @@ def collect_email(request):
 
         # User is found and the user's email is not verified
         id = user['id']
-        text_message = render_to_string('email/message.txt', {'name': username, 'id': id})
-        html_message = render_to_string('email/message.html', {'name': username, 'id': id})
+        text_message = render_to_string('email/verification.txt', {'name': username, 'id': id})
+        html_message = render_to_string('email/verification.html', {'name': username, 'id': id})
 
         result = send_mail(
             subject="Email verification for HyperFlashDrive",
