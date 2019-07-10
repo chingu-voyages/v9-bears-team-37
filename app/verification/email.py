@@ -64,7 +64,37 @@ def collect_email(request):
 
 @csrf_exempt
 def file_token(request):
-    token = generate_token()
-    # if request.method == 'GET':
-    #     return JsonResponse({'msg': 'Not a valid method!'})
-    return JsonResponse({'msg': 'Token email!', "token": token})
+    if request.method == 'GET':
+        return JsonResponse({'msg': 'Not a valid method!'})
+
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    username = body.get('username', 'there').upper()
+    email = body.get('email', '')
+    file_title = body.get('fileTitle', '')
+    file_description = body.get('fileDescription', '')
+
+    schema = graphene.Schema(query=Query)
+    response = schema.execute(query, variables={"email": email})
+
+    data = response.to_dict()['data']
+
+    if data['user']:
+        text_message = render_to_string('email/filetoken.txt',
+                                        {'name': username, 'file_title': file_title,
+                                         'file_description': file_description, 'token': token})
+        html_message = render_to_string('email/filetoken.html',
+                                        {'name': username, 'file_title': file_title,
+                                         'file_description': file_description, 'token': token})
+        result = send_mail(
+            subject="File downloading token",
+            message=text_message,
+            html_message=html_message,
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[email],
+            fail_silently=False)
+
+        if result:
+            return JsonResponse(data)
+    else:
+        return JsonResponse({'msg': 'User not found!'})

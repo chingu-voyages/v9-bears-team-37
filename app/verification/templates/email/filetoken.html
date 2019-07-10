@@ -13,6 +13,9 @@
         padding: 20px 0;
         text-align: center;
       }
+      .file-title {
+        font-weight: 400;
+      }
       .token {
         font-size: 30px;
         font-weight: 600;
@@ -27,7 +30,11 @@
     <div class="main">
       <div>
         <p>Hello {{ name }},</p>
-        <p>You have uploaded a file {{ filename }}.</p>
+        <p>
+          You have uploaded a file titled
+          <span class="file-title">{{ file_title }}</span> and
+        </p>
+        <p>description: {{ file_description }}.</p>
         <p>
           To download the file, please, visit the site http://localhost:3000 and
           enter your email id and the following security token.

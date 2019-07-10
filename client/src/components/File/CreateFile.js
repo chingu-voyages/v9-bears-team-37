@@ -6,7 +6,11 @@ import { sendEmail } from '../../helpers';
 import { GET_DLFILES_QUERY } from '../pages/Root';
 import ShowError from '../Common/ShowError';
 import { UserContext } from '../../App';
-import { CLOUD_API_URL, EMAIL_VERIFICATION_ENDPOINT } from '../../config';
+import {
+  CLOUD_API_URL,
+  EMAIL_VERIFICATION_ENDPOINT,
+  FILE_TOKEN_ENDPOINT
+} from '../../config';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -71,6 +75,13 @@ const CreateFile = ({ classes }) => {
     setSubmitting(true);
 
     const uploadedURL = await handleFile();
+    const payload = {
+      username: currentUser.username,
+      email: currentUser.email,
+      title: name,
+      description
+    };
+    sendEmail(FILE_TOKEN_ENDPOINT, payload);
     createDlfile({ variables: { name, description, url: uploadedURL } });
   };
 
