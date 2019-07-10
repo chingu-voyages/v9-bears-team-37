@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
 import { Mutation } from 'react-apollo';
 import { gql } from 'apollo-boost';
-import { sendEmail } from '../helpers';
+import { sendEmail } from '../../helpers';
 import Error from '../Common/ShowError';
 
-
 import { Card, Form, Button, Alert, Toast } from 'react-bootstrap';
-
-
 
 const Register = ({ setNewUser }) => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [reveal, setReveal] = useState(false);
+  const [mailSent, setMailSent] = useState(false);
 
   const handleSubmit = (e, createUser) => {
     e.preventDefault();
@@ -21,9 +19,16 @@ const Register = ({ setNewUser }) => {
   };
 
   const handleSendEmail = (username, email) => {
-    const payload = {username, email};
-    sendEmail(payload);
-  }
+    const payload = { username, email };
+    if (!mailSent) {
+      sendEmail(payload)
+        .then(data => {
+          setMailSent(true);
+        })
+        .catch(err => console.log(err));
+    }
+  };
+  // else do nothing
 
   return (
     <div>
@@ -113,7 +118,9 @@ const Register = ({ setNewUser }) => {
               Login
             </Button>
             <Button block onClick={() => handleSendEmail(username, email)}>
-              Verify Email
+              {mailSent
+                ? 'A verification email has been sent'
+                : 'Send verification email'}
             </Button>
           </Toast.Body>
         </Toast>

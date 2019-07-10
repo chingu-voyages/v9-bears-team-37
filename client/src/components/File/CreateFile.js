@@ -2,10 +2,11 @@ import React, { useState, useContext } from 'react';
 import { Mutation } from 'react-apollo';
 import { gql } from 'apollo-boost';
 import axios from 'axios';
+import { sendEmail } from '../../helpers';
 import { GET_DLFILES_QUERY } from '../pages/Root';
 import ShowError from '../Common/ShowError';
 import { UserContext } from '../../App';
-import { API_URL } from '../../config';
+import { CLOUD_API_URL, EMAIL_API_URL } from '../../config';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -50,10 +51,8 @@ const CreateFile = ({ classes }) => {
       data.append('upload_preset', 'file-download');
       data.append('cloud_name', 'inightelf');
 
-      const res = await axios.post(
-        'https://api.cloudinary.com/v1_1/inightelf/raw/upload',
-        data
-      );
+      const res = await axios.post(CLOUD_API_URL, data);
+
       return res.data.url;
     } catch (err) {
       console.error('Error uploading file', err);
@@ -85,12 +84,7 @@ const CreateFile = ({ classes }) => {
   const handleSendEmail = (username, email) => {
     const payload = { username, email };
     if (!mailSent) {
-      axios
-        .post(`${API_URL}/email/`, payload, {
-          headers: {
-            'content-type': 'application/json;charset=UTF-8'
-          }
-        })
+      sendEmail(payload)
         .then(data => {
           setMailSent(true);
         })
@@ -125,7 +119,7 @@ const CreateFile = ({ classes }) => {
         >
           {mailSent
             ? 'A verification email has been sent'
-            : 'Send verification email'}
+            : 'Send a verification email again'}
         </Button>
       )}
       <Mutation
@@ -176,7 +170,6 @@ const CreateFile = ({ classes }) => {
                       id='audio'
                       required
                       type='file'
-                      //accept="audio/mp3,audio/wav"
                       className={classes.input}
                       onChange={handleFileupload}
                     />
