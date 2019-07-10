@@ -84,17 +84,19 @@ const CreateFile = ({ classes }) => {
 
   const handleSendEmail = (username, email) => {
     const payload = { username, email };
-
-    axios
-      .post(`${API_URL}/email/`, payload, {
-        headers: {
-          'content-type': 'application/json;charset=UTF-8'
-        }
-      })
-      .then(data => {
-        setMailSent(true);
-      })
-      .catch(err => console.log(err));
+    if (!mailSent) {
+      axios
+        .post(`${API_URL}/email/`, payload, {
+          headers: {
+            'content-type': 'application/json;charset=UTF-8'
+          }
+        })
+        .then(data => {
+          setMailSent(true);
+        })
+        .catch(err => console.log(err));
+    }
+    // else do nothing
   };
 
   return (
@@ -117,13 +119,12 @@ const CreateFile = ({ classes }) => {
           fullWidth
           variant={mailSent ? 'contained' : 'outlined'}
           color='primary'
-          disabled={mailSent}
           onClick={() =>
             handleSendEmail(currentUser.username, currentUser.email)
           }
         >
           {mailSent
-            ? 'A verification email has been sent.'
+            ? 'A verification email has been sent'
             : 'Send verification email'}
         </Button>
       )}
