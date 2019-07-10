@@ -1,15 +1,16 @@
 import React, { useState, useContext } from 'react';
-//import { Button, Toast, Form, Row, Col } from 'react-bootstrap';
 import { Mutation } from 'react-apollo';
 import { gql } from 'apollo-boost';
 import axios from 'axios';
+import { sendEmail } from '../../helpers';
 import { GET_DLFILES_QUERY } from '../pages/Root';
-
 import ShowError from '../Common/ShowError';
-
 import { UserContext } from '../../App';
-import { sendEmail } from '../helpers';
-
+import {
+  CLOUD_API_URL,
+  EMAIL_VERIFICATION_ENDPOINT,
+  FILE_TOKEN_ENDPOINT
+} from '../../config';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -33,6 +34,7 @@ const CreateFile = ({ classes }) => {
   const [file, setFile] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [sizeError, setSizeError] = useState('');
+  const [mailSent, setMailSent] = useState(false);
 
   const handleFileupload = e => {
     const selectedFile = e.target.files[0];
@@ -53,10 +55,8 @@ const CreateFile = ({ classes }) => {
       data.append('upload_preset', 'file-download');
       data.append('cloud_name', 'inightelf');
 
-      const res = await axios.post(
-        'https://api.cloudinary.com/v1_1/inightelf/raw/upload',
-        data
-      );
+      const res = await axios.post(CLOUD_API_URL, data);
+
       return res.data.url;
     } catch (err) {
       console.error('Error uploading file', err);
@@ -75,6 +75,13 @@ const CreateFile = ({ classes }) => {
     setSubmitting(true);
 
     const uploadedURL = await handleFile();
+    const payload = {
+      username: currentUser.username,
+      email: currentUser.email,
+      title: name,
+      description
+    };
+    sendEmail(FILE_TOKEN_ENDPOINT, payload);
     createDlfile({ variables: { name, description, url: uploadedURL } });
   };
 
@@ -87,34 +94,45 @@ const CreateFile = ({ classes }) => {
 
   const handleSendEmail = (username, email) => {
     const payload = { username, email };
-    sendEmail(payload);
+    if (!mailSent) {
+      sendEmail(EMAIL_VERIFICATION_ENDPOINT, payload)
+        .then(data => {
+          setMailSent(true);
+        })
+        .catch(err => console.log(err));
+    }
+    // else do nothing
   };
 
   return (
     <>
-      <Button
-        fullWidth
-        variant='outlined'
-        color='primary'
-        onClick={() => setReveal(true)}
-        style={reveal === false ? { display: 'block' } : { display: 'none' }}
-        disabled={!currentUser.isVerified}
-      >
-        {currentUser.isVerified
-          ? 'Upload'
-          : 'Verify your email to upload files'}
-      </Button>
-      <Button
-        fullWidth
-        variant='outlined'
-        color='primary'
-        onClick={() => handleSendEmail(currentUser.username, currentUser.email)}
-        style={
-          currentUser.isVerified ? { display: 'none' } : { display: 'block' }
-        }
-      >
-        Send verification email
-      </Button>
+      {!reveal && (
+        <Button
+          fullWidth
+          variant='outlined'
+          color='primary'
+          onClick={() => setReveal(true)}
+          disabled={!currentUser.isVerified}
+        >
+          {currentUser.isVerified
+            ? 'Upload'
+            : 'Verify your email to upload files'}
+        </Button>
+      )}
+      {!currentUser.isVerified && (
+        <Button
+          fullWidth
+          variant={mailSent ? 'contained' : 'outlined'}
+          color='primary'
+          onClick={() =>
+            handleSendEmail(currentUser.username, currentUser.email)
+          }
+        >
+          {mailSent
+            ? 'A verification email has been sent'
+            : 'Send a verification email again'}
+        </Button>
+      )}
       <Mutation
         mutation={CREATE_DLFILE_MUTATION}
         onCompleted={data => {
@@ -163,7 +181,6 @@ const CreateFile = ({ classes }) => {
                       id='audio'
                       required
                       type='file'
-                      //accept="audio/mp3,audio/wav"
                       className={classes.input}
                       onChange={handleFileupload}
                     />

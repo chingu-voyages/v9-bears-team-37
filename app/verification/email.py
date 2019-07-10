@@ -1,11 +1,14 @@
 import graphene
 import json
+
 from django.conf import settings
 from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from app.schema import Query
+
+from .helpers import generate_token
 
 
 query = """
@@ -26,7 +29,7 @@ def collect_email(request):
 
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
-    username = body.get('username', 'there')
+    username = body.get('username', 'there').upper()
     email = body.get('email', '')
 
     schema = graphene.Schema(query=Query)
@@ -42,11 +45,49 @@ def collect_email(request):
 
         # User is found and the user's email is not verified
         id = user['id']
-        text_message = render_to_string('email/message.txt', {'name': username, 'id': id})
-        html_message = render_to_string('email/message.html', {'name': username, 'id': id})
+        text_message = render_to_string('email/verification.txt', {'name': username, 'id': id})
+        html_message = render_to_string('email/verification.html', {'name': username, 'id': id})
 
         result = send_mail(
             subject="Email verification for HyperFlashDrive",
+            message=text_message,
+            html_message=html_message,
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[email],
+            fail_silently=False)
+
+        if result:
+            return JsonResponse(data)
+    else:
+        return JsonResponse({'msg': 'User not found!'})
+
+
+@csrf_exempt
+def file_token(request):
+    if request.method == 'GET':
+        return JsonResponse({'msg': 'Not a valid method!'})
+
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    username = body.get('username', 'there').upper()
+    email = body.get('email', '')
+    file_title = body.get('fileTitle', '')
+    file_description = body.get('fileDescription', '')
+
+    schema = graphene.Schema(query=Query)
+    response = schema.execute(query, variables={"email": email})
+
+    data = response.to_dict()['data']
+
+    if data['user']:
+        text_message = render_to_string('email/filetoken.txt',
+                                        {'name': username, 'file_title': file_title,
+                                         'file_description': file_description, 'token': token})
+        html_message = render_to_string('email/filetoken.html',
+                                        {'name': username, 'file_title': file_title,
+                                         'file_description': file_description, 'token': token})
+        result = send_mail(
+            subject="File downloading token",
             message=text_message,
             html_message=html_message,
             from_email=settings.EMAIL_HOST_USER,

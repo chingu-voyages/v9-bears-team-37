@@ -1,0 +1,55 @@
+<html>
+  <header>
+    <title>Verification mail</title>
+    <style>
+      .main {
+        background-color: #9aadc7f1;
+        color: #07305e;
+      }
+      .header,
+      .footer {
+        background-color: #07305e;
+        color: aliceblue;
+        padding: 20px 0;
+        text-align: center;
+      }
+      .file-title {
+        font-weight: 400;
+      }
+      .token {
+        font-size: 30px;
+        font-weight: 600;
+        letter-spacing: 1px;
+      }
+    </style>
+  </header>
+  <body>
+    <div class="header">
+      <h1>HyperFlashDrive</h1>
+    </div>
+    <div class="main">
+      <div>
+        <p>Hello {{ name }},</p>
+        <p>
+          You have uploaded a file titled
+          <span class="file-title">{{ file_title }}</span> and
+        </p>
+        <p>description: {{ file_description }}.</p>
+        <p>
+          To download the file, please, visit the site http://localhost:3000 and
+          enter your email id and the following security token.
+        </p>
+        <p>
+          Security token: <span class="token">{{ token }}</span>
+        </p>
+      </div>
+      <div>
+        <p>Thank you for trying <b>HyperFlashDrive</b></p>
+        <p>-- Team HyperFlashDrive</p>
+      </div>
+    </div>
+    <div class="footer">
+      <small>&copy; 2019 HyperFlashDrive</small>
+    </div>
+  </body>
+</html>

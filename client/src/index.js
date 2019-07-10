@@ -7,11 +7,12 @@ import { ApolloProvider, Query } from 'react-apollo';
 import ApolloClient, { gql } from 'apollo-boost';
 import Dashboard from './components/Common/Dashboard';
 import Auth from './components/Authentications';
+import { GRAPHQL_API_URL } from './config';
 
 import { Container, Row, Col } from 'react-bootstrap';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:8000/graphql/',
+  uri: GRAPHQL_API_URL,
   fetchOptions: {
     credentials: 'include'
   },
@@ -38,7 +39,7 @@ const IS_LOGGED_IN_QUERY = gql`
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <Container fluid={true} className="App">
+    <Container fluid={true} className='App'>
       <Row>
         <Col sm={6}>
           <Dashboard />
