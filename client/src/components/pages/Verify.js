@@ -18,9 +18,7 @@ const Confirm = props => {
 
   const handleConfirmEmail = (event, updateUser) => {
     event.preventDefault();
-    updateUser()
-      .then(data => console.log(data))
-      .catch(error => console.log(error));
+    updateUser();
     setRedirect(true);
   };
 
@@ -31,12 +29,13 @@ const Confirm = props => {
         mutation={CONFIRM_EMAIL_QUERY}
         variables={{ userId: id, isVerified: true }}
         onCompleted={data => {
-          console.log(data);
+          console.log({ data });
         }}
+        onError={error => console.log(error)}
       >
         {(updateUser, { loading, error }) => {
           if (error) {
-            console.log('error=>', error);
+            console.log(error);
           }
           if (loading) {
             console.log('loading ...');
