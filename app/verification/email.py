@@ -57,7 +57,3 @@ def collect_email(request):
             return JsonResponse(data)
     else:
         return JsonResponse({'msg': 'User not found!'})
-
-
-def confirm_email(request, id):
-    pass

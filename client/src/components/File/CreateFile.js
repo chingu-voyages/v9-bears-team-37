@@ -7,7 +7,7 @@ import { GET_DLFILES_QUERY } from '../pages/Root';
 
 import ShowError from '../Common/ShowError';
 
-import { UserContext, ME_QUERY } from '../../App';
+import { UserContext } from '../../App';
 import { sendEmail } from '../helpers';
 
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -86,9 +86,9 @@ const CreateFile = ({ classes }) => {
   };
 
   const handleSendEmail = (username, email) => {
-    const payload = {username, email};
+    const payload = { username, email };
     sendEmail(payload);
-  }
+  };
 
   return (
     <>
@@ -109,9 +109,11 @@ const CreateFile = ({ classes }) => {
         variant='outlined'
         color='primary'
         onClick={() => handleSendEmail(currentUser.username, currentUser.email)}
-        style={currentUser.isVerified ? { display: 'none' } : { display: 'block' }}
+        style={
+          currentUser.isVerified ? { display: 'none' } : { display: 'block' }
+        }
       >
-        Verify your email
+        Send verification email
       </Button>
       <Mutation
         mutation={CREATE_DLFILE_MUTATION}

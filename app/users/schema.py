@@ -51,5 +51,35 @@ class CreateUser(graphene.Mutation):
         return CreateUser(user=user)
 
 
+class UpdateUser(graphene.Mutation):
+    user = graphene.Field(UserType)
+
+    class Arguments:
+        user_id = graphene.Int(required=True)
+        username = graphene.String()
+        password = graphene.String()
+        is_verified = graphene.Boolean()
+
+    def mutate(self, info, user_id, username=None,
+               password=None, is_verified=None):
+        loggedInUser = info.context.user
+        user = User.objects.get(id=user_id)
+
+        if user != loggedInUser:
+            raise Exception('Not permitted to update this user!')
+        if username:
+            user.username = username
+        if password:
+            user.set_password(password)
+        if is_verified:
+            if user.is_verified:
+                raise Exception('Your email is already verified!')
+            user.is_verified = is_verified
+        user.save()
+
+        return UpdateUser(user=user)
+
+
 class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
+    update_user = UpdateUser.Field()

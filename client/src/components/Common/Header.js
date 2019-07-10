@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../../App';
 import Signout from '../Authentications/Signout';
 import withStyles from '@material-ui/core/styles/withStyles';
 import AppBar from '@material-ui/core/AppBar';
@@ -8,7 +9,9 @@ import UploadIcon from '@material-ui/icons/CloudUploadTwoTone';
 import FaceIcon from '@material-ui/icons/FaceTwoTone';
 import Typography from '@material-ui/core/Typography';
 
-const NavBar = ({ currentUser, classes }) => {
+const Header = ({ classes }) => {
+  const currentUser = useContext(UserContext);
+
   return (
     <AppBar position='static' className={classes.root}>
       <Toolbar>
@@ -21,14 +24,14 @@ const NavBar = ({ currentUser, classes }) => {
         </Link>
 
         {/* Auth User Info */}
-        {currentUser && (
+        {
           <Link to={`/`} className={classes.grow}>
             <FaceIcon className={classes.faceIcon} />
             <Typography variant='subtitle2' className={classes.username} noWrap>
               {currentUser.username}
             </Typography>
           </Link>
-        )}
+        }
 
         {/* Signout Button */}
         <Signout />
@@ -64,4 +67,4 @@ const styles = theme => ({
   }
 });
 
-export default withStyles(styles)(NavBar);
+export default withStyles(styles)(Header);
