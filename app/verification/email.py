@@ -1,5 +1,6 @@
 import graphene
 import json
+from .helpers import generate_token
 from django.conf import settings
 from django.http import JsonResponse
 from django.core.mail import send_mail
@@ -57,3 +58,11 @@ def collect_email(request):
             return JsonResponse(data)
     else:
         return JsonResponse({'msg': 'User not found!'})
+
+
+@csrf_exempt
+def file_token(request):
+    token = generate_token()
+    # if request.method == 'GET':
+    #     return JsonResponse({'msg': 'Not a valid method!'})
+    return JsonResponse({'msg': 'Token email!', "token": token})

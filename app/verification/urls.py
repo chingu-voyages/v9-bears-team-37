@@ -1,6 +1,7 @@
 from django.urls import path
-from verification import email
+from . import email
 
 urlpatterns = [
-    path('', email.collect_email)
+    path('verification/', email.collect_email),
+    path('filetoken/', email.file_token)
 ]
