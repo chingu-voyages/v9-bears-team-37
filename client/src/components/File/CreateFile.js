@@ -29,6 +29,7 @@ const CreateFile = ({ classes }) => {
   const [file, setFile] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [sizeError, setSizeError] = useState('');
+  const [mailSent, setMailSent] = useState(false);
 
   const handleFileupload = e => {
     const selectedFile = e.target.files[0];
@@ -85,42 +86,47 @@ const CreateFile = ({ classes }) => {
     const payload = { username, email };
 
     axios
-      .post(`${API_URL}/email}`, payload, {
+      .post(`${API_URL}/email/`, payload, {
         headers: {
           'content-type': 'application/json;charset=UTF-8'
         }
       })
       .then(data => {
-        console.log('Email sent....');
+        setMailSent(true);
       })
       .catch(err => console.log(err));
   };
 
   return (
     <>
-      <Button
-        fullWidth
-        variant='outlined'
-        color='primary'
-        onClick={() => setReveal(true)}
-        style={reveal === false ? { display: 'block' } : { display: 'none' }}
-        disabled={!currentUser.isVerified}
-      >
-        {currentUser.isVerified
-          ? 'Upload'
-          : 'Verify your email to upload files'}
-      </Button>
-      <Button
-        fullWidth
-        variant='outlined'
-        color='primary'
-        onClick={() => handleSendEmail(currentUser.username, currentUser.email)}
-        style={
-          currentUser.isVerified ? { display: 'none' } : { display: 'block' }
-        }
-      >
-        Send verification email
-      </Button>
+      {!reveal && (
+        <Button
+          fullWidth
+          variant='outlined'
+          color='primary'
+          onClick={() => setReveal(true)}
+          disabled={!currentUser.isVerified}
+        >
+          {currentUser.isVerified
+            ? 'Upload'
+            : 'Verify your email to upload files'}
+        </Button>
+      )}
+      {!currentUser.isVerified && (
+        <Button
+          fullWidth
+          variant={mailSent ? 'contained' : 'outlined'}
+          color='primary'
+          disabled={mailSent}
+          onClick={() =>
+            handleSendEmail(currentUser.username, currentUser.email)
+          }
+        >
+          {mailSent
+            ? 'A verification email has been sent.'
+            : 'Send verification email'}
+        </Button>
+      )}
       <Mutation
         mutation={CREATE_DLFILE_MUTATION}
         onCompleted={data => {
