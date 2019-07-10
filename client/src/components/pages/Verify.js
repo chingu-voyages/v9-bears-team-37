@@ -1,15 +1,13 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import { UserContext } from '../../App';
-import { sendEmail } from '../helpers';
+import { Mutation } from 'react-apollo';
+import { gql } from 'apollo-boost';
 import Loading from '../Common/Loading';
 import ShowError from '../Common/ShowError';
 import Button from '@material-ui/core/Button';
 
 const Confirm = props => {
   const [redirect, setRedirect] = useState(false);
-
-  const user = useContext(UserContext);
   const { id } = props.match.params;
 
   const renderReidrect = () => {
@@ -18,33 +16,57 @@ const Confirm = props => {
     }
   };
 
-  const handleSendEmail = (id, user) => {
-    if (id !== user.id) {
-      console.log('You are not authorized to verify!');
-    } else if (user.isVerified) {
-      console.log('Your email is already verified!');
-    } else {
-      console.log('Sending confirmation request');
-      const payload = { user };
-      const endpoint = `email/confirm`;
-      sendEmail(payload, endpoint);
-    }
+  const handleConfirmEmail = (event, updateUser) => {
+    event.preventDefault();
+    updateUser()
+      .then(data => console.log(data))
+      .catch(error => console.log(error));
     setRedirect(true);
   };
 
   return (
-    <div>
+    <>
       {renderReidrect()}
-      <Button
-        fullWidth
-        variant='outlined'
-        color='primary'
-        onClick={() => handleSendEmail(id, user)}
+      <Mutation
+        mutation={CONFIRM_EMAIL_QUERY}
+        variables={{ userId: id, isVerified: true }}
+        onCompleted={data => {
+          console.log(data);
+        }}
       >
-        Verify your email
-      </Button>
-    </div>
+        {(updateUser, { loading, error }) => {
+          if (error) {
+            console.log('error=>', error);
+          }
+          if (loading) {
+            console.log('loading ...');
+          }
+
+          return (
+            <Button
+              fullWidth
+              variant='outlined'
+              color='primary'
+              onClick={event => handleConfirmEmail(event, updateUser)}
+            >
+              Verify your email
+            </Button>
+          );
+        }}
+      </Mutation>
+    </>
   );
 };
+
+const CONFIRM_EMAIL_QUERY = gql`
+  mutation($userId: Int!, $isVerified: Boolean) {
+    updateUser(userId: $userId, isVerified: $isVerified) {
+      user {
+        id
+        isVerified
+      }
+    }
+  }
+`;
 
 export default Confirm;
