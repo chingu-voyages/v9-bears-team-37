@@ -6,7 +6,7 @@ import { sendEmail } from '../../helpers';
 import { GET_DLFILES_QUERY } from '../pages/Root';
 import ShowError from '../Common/ShowError';
 import { UserContext } from '../../App';
-import { CLOUD_API_URL } from '../../config';
+import { CLOUD_API_URL, EMAIL_VERIFICATION_ENDPOINT } from '../../config';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -84,7 +84,7 @@ const CreateFile = ({ classes }) => {
   const handleSendEmail = (username, email) => {
     const payload = { username, email };
     if (!mailSent) {
-      sendEmail(payload)
+      sendEmail(EMAIL_VERIFICATION_ENDPOINT, payload)
         .then(data => {
           setMailSent(true);
         })

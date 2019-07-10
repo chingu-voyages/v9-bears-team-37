@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Mutation } from 'react-apollo';
 import { gql } from 'apollo-boost';
 import { sendEmail } from '../../helpers';
+import { EMAIL_VERIFICATION_ENDPOINT } from '../../config';
 import Error from '../Common/ShowError';
 
 import { Card, Form, Button, Alert, Toast } from 'react-bootstrap';
@@ -20,8 +21,9 @@ const Register = ({ setNewUser }) => {
 
   const handleSendEmail = (username, email) => {
     const payload = { username, email };
+
     if (!mailSent) {
-      sendEmail(payload)
+      sendEmail(EMAIL_VERIFICATION_ENDPOINT, payload)
         .then(data => {
           setMailSent(true);
         })
