@@ -1,15 +1,11 @@
 import React, { useState, useContext } from 'react';
-//import { Button, Toast, Form, Row, Col } from 'react-bootstrap';
 import { Mutation } from 'react-apollo';
 import { gql } from 'apollo-boost';
 import axios from 'axios';
 import { GET_DLFILES_QUERY } from '../pages/Root';
-
 import ShowError from '../Common/ShowError';
-
 import { UserContext } from '../../App';
-import { sendEmail } from '../helpers';
-
+import { API_URL } from '../../config';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -87,7 +83,17 @@ const CreateFile = ({ classes }) => {
 
   const handleSendEmail = (username, email) => {
     const payload = { username, email };
-    sendEmail(payload);
+
+    axios
+      .post(`${API_URL}/email}`, payload, {
+        headers: {
+          'content-type': 'application/json;charset=UTF-8'
+        }
+      })
+      .then(data => {
+        console.log('Email sent....');
+      })
+      .catch(err => console.log(err));
   };
 
   return (
