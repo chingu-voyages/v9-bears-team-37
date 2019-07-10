@@ -26,7 +26,7 @@ def collect_email(request):
 
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
-    username = body.get('username', 'there')
+    username = body.get('username', 'there').upper()
     email = body.get('email', '')
 
     schema = graphene.Schema(query=Query)
