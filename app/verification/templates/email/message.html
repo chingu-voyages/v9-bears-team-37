@@ -1,11 +1,39 @@
 <html>
+  <header>
+    <title>Verification mail</title>
+    <style>
+      .main {
+        background-color: #9aadc7f1;
+        color: #07305e;
+      }
+      .header,
+      .footer {
+        background-color: #07305e;
+        color: aliceblue;
+        padding: 20px 0;
+        text-align: center;
+      }
+    </style>
+  </header>
   <body>
-    <p>Hello {{ name }},</p>
-    <p>
-      Please verify your email by clicking the
-      <a href="http://localhost:3000/email/{{ id }}">link</a>.
-    </p>
-    <p>Thank you for trying <b>HyperFlashDrive</b></p>
-    <p>-- Team HyperFlashDrive</p>
+    <div class="header">
+      <h1>HyperFlashDrive</h1>
+    </div>
+    <div class="main">
+      <div>
+        <p>Hello {{ name }},</p>
+        <p>
+          Please verify your email by clicking the
+          <a href="http://localhost:3000/email/{{ id }}">link</a>.
+        </p>
+      </div>
+      <div>
+        <p>Thank you for trying <b>HyperFlashDrive</b></p>
+        <p>-- Team HyperFlashDrive</p>
+      </div>
+    </div>
+    <div class="footer">
+      <small>&copy; 2019 HyperFlashDrive</small>
+    </div>
   </body>
 </html>
