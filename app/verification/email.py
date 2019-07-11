@@ -8,9 +8,6 @@ from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from app.schema import Query
 
-from .helpers import generate_token
-
-
 query = """
     query($email: String!){
         user(email: $email) {
@@ -29,7 +26,7 @@ def collect_email(request):
 
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
-    username = body.get('username', 'there').upper()
+    user_name = body.get('username', 'there').upper()
     email = body.get('email', '')
 
     schema = graphene.Schema(query=Query)
@@ -45,8 +42,8 @@ def collect_email(request):
 
         # User is found and the user's email is not verified
         id = user['id']
-        text_message = render_to_string('email/verification.txt', {'name': username, 'id': id})
-        html_message = render_to_string('email/verification.html', {'name': username, 'id': id})
+        text_message = render_to_string('email/verification.txt', {'user_name': user_name, 'id': id})
+        html_message = render_to_string('email/verification.html', {'user_name': user_name, 'id': id})
 
         result = send_mail(
             subject="Email verification for HyperFlashDrive",
@@ -69,10 +66,11 @@ def file_token(request):
 
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
-    username = body.get('username', 'there').upper()
+    user_name = body.get('username', 'there').upper()
     email = body.get('email', '')
     file_title = body.get('fileTitle', '')
     file_description = body.get('fileDescription', '')
+    file_token = body.get('fileToken', '')
 
     schema = graphene.Schema(query=Query)
     response = schema.execute(query, variables={"email": email})
@@ -81,11 +79,11 @@ def file_token(request):
 
     if data['user']:
         text_message = render_to_string('email/filetoken.txt',
-                                        {'name': username, 'file_title': file_title,
-                                         'file_description': file_description, 'token': token})
+                                        {'user_name': user_name, 'file_title': file_title,
+                                         'file_description': file_description, 'file_token': file_token})
         html_message = render_to_string('email/filetoken.html',
-                                        {'name': username, 'file_title': file_title,
-                                         'file_description': file_description, 'token': token})
+                                        {'user_name': user_name, 'file_title': file_title,
+                                         'file_description': file_description, 'file_token': file_token})
         result = send_mail(
             subject="File downloading token",
             message=text_message,
