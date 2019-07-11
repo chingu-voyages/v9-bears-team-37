@@ -21,7 +21,7 @@
         color: #1f5491;
       }
       .token {
-        font-size: 30px;
+        font-size: 20px;
         font-weight: 600;
         letter-spacing: 1px;
       }
@@ -35,8 +35,13 @@
       <div>
         <p>Hello {{ user_name }},</p>
         <p>You have uploaded a file.</p>
-        <p><b>Name:</b> <span class="file-name">{{ file_name }}</span></p>
-        <p><b>Description:</b> <span class="file-description">{{ file_description }}</span></p>
+        <p>
+          <b>Name:</b> <span class="file-name">{{ file_name }}</span>
+        </p>
+        <p>
+          <b>Description:</b>
+          <span class="file-description">{{ file_description }}</span>
+        </p>
         <p>
           To download the file, please, visit the site http://localhost:3000 and
           enter your email id and the following security token.
