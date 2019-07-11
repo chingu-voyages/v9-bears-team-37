@@ -1,4 +1,5 @@
 import graphene
+from django.db.models import Q
 from graphene_django import DjangoObjectType
 from graphql import GraphQLError
 
@@ -16,7 +17,15 @@ class Query(graphene.ObjectType):
 
     def resolve_dlfiles(self, info, search=None):
         if search:
-            return Dlfile.objects.filter(name__startswith=search)
+            filter = (
+                Q(title__icontains=search) |
+                Q(description__icontains=search) |
+                Q(url__icontains=search) |
+                Q(file_token__icontains=search) |
+                Q(posted_by__username__icontains=search) |
+                Q(posted_by__email__icontains=search)
+            )
+            return Dlfile.objects.filter(filter)
 
         return Dlfile.objects.all()
 
