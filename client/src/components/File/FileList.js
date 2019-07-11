@@ -50,6 +50,9 @@ const FileList = ({ dlfiles, classes }) => {
                 }}
                 primary={dlfile.name}
               />
+              <Typography variant='inherit'>
+                Download token: {dlfile.fileToken}
+              </Typography>
             </ListItem>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails className={classes.details}>
