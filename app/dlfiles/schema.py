@@ -3,6 +3,7 @@ from graphene_django import DjangoObjectType
 from graphql import GraphQLError
 
 from .models import Dlfile
+from verification.helpers import generate_token
 
 
 class DlfileType(DjangoObjectType):
@@ -33,9 +34,11 @@ class CreateDlfile(graphene.Mutation):
 
         if user.is_anonymous:
             raise GraphQLError('Log in to upload a file')
+        
+        file_token = generate_token()
 
         dlfile = Dlfile(name=name, description=description,
-                        url=url, posted_by=user)
+                        url=url, file_token=file_token, posted_by=user)
         dlfile.save()
         return CreateDlfile(dlfile=dlfile)
 
