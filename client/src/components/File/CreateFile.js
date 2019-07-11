@@ -57,7 +57,7 @@ const CreateFile = ({ classes }) => {
       data.append('cloud_name', 'inightelf');
 
       const res = await axios.post(CLOUD_API_URL, data);
-
+      console.log('url => ', res.data.url);
       return res.data.url;
     } catch (err) {
       console.error('Error uploading file', err);
@@ -76,7 +76,13 @@ const CreateFile = ({ classes }) => {
     setSubmitting(true);
 
     const uploadedURL = await handleFile();
-    createDlfile({ variables: { name: fileName, description: fileDescription, url: uploadedURL } });
+    createDlfile({
+      variables: {
+        name: fileName,
+        description: fileDescription,
+        url: uploadedURL
+      }
+    });
   };
 
   const handleCancel = () => {
@@ -107,7 +113,7 @@ const CreateFile = ({ classes }) => {
       fileToken
     };
     sendEmail(FILE_TOKEN_ENDPOINT, payload);
-  }
+  };
 
   return (
     <>
@@ -147,8 +153,8 @@ const CreateFile = ({ classes }) => {
           setFileName('');
           setFileDescription('');
           setFile('');
-          setFileToken(data.dlfile.fileToken);
-          handleSendFileToken();
+          setFileToken('token0');
+          // handleSendFileToken();
         }}
         update={handleUpdateCache}
         // refetchQueries={() => [{ query: GET_DLFILES_QUERY }]}
@@ -216,7 +222,10 @@ const CreateFile = ({ classes }) => {
                   </Button>
                   <Button
                     disabled={
-                      submitting || !fileName.trim() || !fileDescription.trim() || !file
+                      submitting ||
+                      !fileName.trim() ||
+                      !fileDescription.trim() ||
+                      !file
                     }
                     type='submit'
                     className={classes.save}
