@@ -6,11 +6,7 @@ import { sendEmail } from '../../helpers';
 import { GET_DLFILES_QUERY } from '../pages/Root';
 import ShowError from '../Common/ShowError';
 import { UserContext } from '../../App';
-import {
-  CLOUD_API_URL,
-  EMAIL_VERIFICATION_ENDPOINT,
-  FILE_TOKEN_ENDPOINT
-} from '../../config';
+import { CLOUD_API_URL, EMAIL_VERIFICATION_ENDPOINT } from '../../config';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -29,19 +25,17 @@ import AttachFileIcon from '@material-ui/icons/AttachFile';
 const CreateFile = ({ classes }) => {
   const currentUser = useContext(UserContext);
   const [reveal, setReveal] = useState(false);
-  const [fileName, setFileName] = useState('');
-  const [fileDescription, setFileDescription] = useState('');
-  const [fileToken, setFileToken] = useState('');
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
   const [file, setFile] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [sizeError, setSizeError] = useState('');
   const [mailSent, setMailSent] = useState(false);
-
   const handleFileupload = e => {
     const selectedFile = e.target.files[0];
     const fileSizeLimit = 15000000;
     if (selectedFile && selectedFile.size > fileSizeLimit) {
-      setSizeError(`${selectedFile.fileName}: File size too large`);
+      setSizeError(`${selectedFile.name}: File size too large`);
     } else {
       setFile(selectedFile);
       setSizeError('');
@@ -57,7 +51,7 @@ const CreateFile = ({ classes }) => {
       data.append('cloud_name', 'inightelf');
 
       const res = await axios.post(CLOUD_API_URL, data);
-      console.log('url => ', res.data.url);
+
       return res.data.url;
     } catch (err) {
       console.error('Error uploading file', err);
@@ -74,25 +68,18 @@ const CreateFile = ({ classes }) => {
   const handleSubmit = async (e, createDlfile) => {
     e.preventDefault();
     setSubmitting(true);
-
     const uploadedURL = await handleFile();
-    createDlfile({
-      variables: {
-        name: fileName,
-        description: fileDescription,
-        url: uploadedURL
-      }
-    });
+    createDlfile({ variables: { name, description, url: uploadedURL } });
   };
 
   const handleCancel = () => {
     setReveal(false);
-    setFileName('');
-    setFileDescription('');
+    setName('');
+    setDescription('');
     setFile('');
   };
 
-  const handleSendVerificationEmail = (username, email) => {
+  const handleSendEmail = (username, email) => {
     const payload = { username, email };
     if (!mailSent) {
       sendEmail(EMAIL_VERIFICATION_ENDPOINT, payload)
@@ -102,17 +89,6 @@ const CreateFile = ({ classes }) => {
         .catch(err => console.log(err));
     }
     // else do nothing
-  };
-
-  const handleSendFileToken = () => {
-    const payload = {
-      username: currentUser.username,
-      email: currentUser.email,
-      fileName,
-      fileDescription,
-      fileToken
-    };
-    sendEmail(FILE_TOKEN_ENDPOINT, payload);
   };
 
   return (
@@ -136,7 +112,7 @@ const CreateFile = ({ classes }) => {
           variant={mailSent ? 'contained' : 'outlined'}
           color='primary'
           onClick={() =>
-            handleSendVerificationEmail(currentUser.username, currentUser.email)
+            handleSendEmail(currentUser.username, currentUser.email)
           }
         >
           {mailSent
@@ -150,11 +126,9 @@ const CreateFile = ({ classes }) => {
           console.log({ data });
           setSubmitting(false);
           setReveal(false);
-          setFileName('');
-          setFileDescription('');
+          setName('');
+          setDescription('');
           setFile('');
-          setFileToken('token0');
-          // handleSendFileToken();
         }}
         update={handleUpdateCache}
         // refetchQueries={() => [{ query: GET_DLFILES_QUERY }]}
@@ -173,8 +147,8 @@ const CreateFile = ({ classes }) => {
                     <TextField
                       label='Title'
                       placeholder='Add Title'
-                      onChange={event => setFileName(event.target.value)}
-                      value={fileName}
+                      onChange={event => setName(event.target.value)}
+                      value={name}
                       className={classes.textField}
                     />
                   </FormControl>
@@ -184,8 +158,8 @@ const CreateFile = ({ classes }) => {
                       rows='4'
                       label='Description'
                       placeholder='Add Description'
-                      onChange={event => setFileDescription(event.target.value)}
-                      value={fileDescription}
+                      onChange={event => setDescription(event.target.value)}
+                      value={description}
                       className={classes.textField}
                     />
                   </FormControl>
@@ -222,10 +196,7 @@ const CreateFile = ({ classes }) => {
                   </Button>
                   <Button
                     disabled={
-                      submitting ||
-                      !fileName.trim() ||
-                      !fileDescription.trim() ||
-                      !file
+                      submitting || !name.trim() || !description.trim() || !file
                     }
                     type='submit'
                     className={classes.save}
@@ -247,8 +218,8 @@ const CreateFile = ({ classes }) => {
 };
 
 const CREATE_DLFILE_MUTATION = gql`
-  mutation($fileName: String!, $fileDescription: String!, $url: String) {
-    createDlfile(name: $fileName, description: $fileDescription, url: $url) {
+  mutation($name: String!, $description: String!, $url: String) {
+    createDlfile(name: $name, description: $description, url: $url) {
       dlfile {
         id
         name
