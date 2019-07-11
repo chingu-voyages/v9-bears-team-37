@@ -13,7 +13,7 @@
         padding: 20px 0;
         text-align: center;
       }
-      .file-title {
+      .file-name {
         color: #021122;
         font-weight: 400;
       }
@@ -35,8 +35,8 @@
       <div>
         <p>Hello {{ user_name }},</p>
         <p>You have uploaded a file.</p>
-        <p>title: <span class="file-title">{{ file_title }}</span></p>
-        <p>description: <span class="file-title">{{ file_description }}</span></p>
+        <p><b>Name:</b> <span class="file-name">{{ file_name }}</span></p>
+        <p><b>Description:</b> <span class="file-description">{{ file_description }}</span></p>
         <p>
           To download the file, please, visit the site http://localhost:3000 and
           enter your email id and the following security token.

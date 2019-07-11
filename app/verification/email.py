@@ -68,7 +68,7 @@ def file_token(request):
     body = json.loads(body_unicode)
     user_name = body.get('username', 'there').upper()
     email = body.get('email', '')
-    file_title = body.get('fileTitle', '')
+    file_name = body.get('fileName', '')
     file_description = body.get('fileDescription', '')
     file_token = body.get('fileToken', '')
 
@@ -79,10 +79,10 @@ def file_token(request):
 
     if data['user']:
         text_message = render_to_string('email/filetoken.txt',
-                                        {'user_name': user_name, 'file_title': file_title,
+                                        {'user_name': user_name, 'file_name': file_name,
                                          'file_description': file_description, 'file_token': file_token})
         html_message = render_to_string('email/filetoken.html',
-                                        {'user_name': user_name, 'file_title': file_title,
+                                        {'user_name': user_name, 'file_name': file_name,
                                          'file_description': file_description, 'file_token': file_token})
         result = send_mail(
             subject="File downloading token",
