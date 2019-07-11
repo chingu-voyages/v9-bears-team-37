@@ -98,6 +98,7 @@ const PROFILE_QYERY = gql`
         description
         url
         fileToken
+        tokenSent
       }
     }
   }

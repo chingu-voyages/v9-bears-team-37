@@ -35,6 +35,7 @@ export const GET_DLFILES_QUERY = gql`
       description
       url
       fileToken
+      tokenSent
       postedBy {
         id
         username

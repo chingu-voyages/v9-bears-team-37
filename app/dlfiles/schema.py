@@ -43,7 +43,7 @@ class CreateDlfile(graphene.Mutation):
 
         if user.is_anonymous:
             raise GraphQLError('Log in to upload a file')
-        
+
         file_token = generate_token()
 
         dlfile = Dlfile(name=name, description=description,
@@ -60,18 +60,26 @@ class UpdateDlfile(graphene.Mutation):
         name = graphene.String()
         description = graphene.String()
         url = graphene.String()
+        token_sent = graphene.Boolean()
 
-    def mutate(self, info, dlfile_id, name, url, description):
+    def mutate(self, info, dlfile_id, name=None, description=None, url=None, token_sent=None):
         user = info.context.user
         dlfile = Dlfile.objects.get(id=dlfile_id)
 
         if dlfile.posted_by != user:
             raise GraphQLError('Not permitted to update this')
 
-        dlfile.name = name
-        dlfile.description = description
-        dlfile.url = url
+        if name:
+            dlfile.name = name
+        if description:
+            dlfile.description = description
+        if url:
+            dlfile.url = url
+        if token_sent:
+            dlfile.token_sent = token_sent
+
         dlfile.save()
+
         return UpdateDlfile(dlfile=dlfile)
 
 

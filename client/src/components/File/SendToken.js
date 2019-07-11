@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Mutation } from 'react-apollo';
+import { gql } from 'apollo-boost';
 import { FILE_TOKEN_ENDPOINT } from '../../config';
 import { sendEmail } from '../../helpers';
 import ShowError from '../Common/ShowError';
@@ -9,7 +11,13 @@ import Button from '@material-ui/core/Button';
 const SendToken = ({ currentUser, dlfile }) => {
   const [tokenSent, setTokenSent] = useState(false);
 
-  const handleSendToken = ({ fileName, fileDescription, fileToken }) => {
+  const handleSendToken = (
+    updateDlfile,
+    { fileName, fileDescription, fileToken }
+  ) => {
+    updateDlfile({
+      variables: { dlfileId: dlfile.id, tokenSent: true }
+    });
     const payload = {
       userName: currentUser.username,
       email: currentUser.email,
@@ -25,20 +33,50 @@ const SendToken = ({ currentUser, dlfile }) => {
   };
 
   return (
-    <Button
-      variant={tokenSent ? 'contained' : 'outlined'}
-      onClick={() =>
-        handleSendToken({
-          fileName: dlfile.name,
-          fileDescription: dlfile.description,
-          fileToken: dlfile.fileToken
-        })
-      }
-      disabled={tokenSent}
+    <Mutation
+      mutation={UPDATE_DLFILE_MUTATION}
+      onCompleted={data => {
+        console.log(data);
+        setTokenSent(true);
+      }}
     >
-      {tokenSent ? 'Token Sent' : 'Send Token'}
-    </Button>
+      {(updateDlfile, { loading, error }) => {
+        if (error) return <ShowError error={error} />;
+        return (
+          <Button
+            variant={tokenSent ? 'contained' : 'outlined'}
+            onClick={() =>
+              handleSendToken(updateDlfile, {
+                fileName: dlfile.name,
+                fileDescription: dlfile.description,
+                fileToken: dlfile.fileToken
+              })
+            }
+            disabled={tokenSent}
+          >
+            {tokenSent || dlfile.tokenSent ? 'Token Sent' : 'Send Token'}
+          </Button>
+        );
+      }}
+    </Mutation>
   );
 };
+
+const UPDATE_DLFILE_MUTATION = gql`
+  mutation($dlfileId: Int!, $tokenSent: Boolean) {
+    updateDlfile(dlfileId: $dlfileId, tokenSent: $tokenSent) {
+      dlfile {
+        id
+        name
+        description
+        url
+        postedBy {
+          id
+          username
+        }
+      }
+    }
+  }
+`;
 
 export default SendToken;
