@@ -60,9 +60,16 @@ const CreateFile = ({ classes }) => {
   };
 
   const handleUpdateCache = (cache, { data: { createDlfile } }) => {
-    const data = cache.readQuery({ query: GET_DLFILES_QUERY });
+    const data = cache.readQuery({
+      query: GET_DLFILES_QUERY,
+      variables: { email: currentUser.email }
+    });
     const dlfiles = data.dlfiles.concat(createDlfile.dlfile);
-    cache.writeQuery({ query: GET_DLFILES_QUERY, data: { dlfiles } });
+    cache.writeQuery({
+      query: GET_DLFILES_QUERY,
+      variables: { email: currentUser.email },
+      data: { dlfiles }
+    });
   };
 
   const handleSubmit = async (e, createDlfile) => {
@@ -131,7 +138,9 @@ const CreateFile = ({ classes }) => {
           setFile('');
         }}
         update={handleUpdateCache}
-        // refetchQueries={() => [{ query: GET_DLFILES_QUERY }]}
+        refetchQueries={() => [
+          { query: GET_DLFILES_QUERY, variables: { email: currentUser.email } }
+        ]}
       >
         {(createDlfile, { loading, error }) => {
           if (error) return <ShowError error={error} />;

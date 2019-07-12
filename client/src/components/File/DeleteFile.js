@@ -17,7 +17,9 @@ const DeleteFile = ({ dlfile }) => {
         onCompleted={data => {
           console.log(data);
         }}
-        refetchQueries={() => [{ query: GET_DLFILES_QUERY }]}
+        refetchQueries={() => [
+          { query: GET_DLFILES_QUERY, variables: { email: currentUser.email } }
+        ]}
       >
         {deleteDlfile => (
           <>

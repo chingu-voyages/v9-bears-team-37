@@ -44,15 +44,4 @@ const ME_QUERY = gql`
   }
 `;
 
-// const GET_DLFILES_QUERY = gql`
-//   {
-//     dlfiles {
-//       id
-//       name
-//       description
-//       url
-//     }
-//   }
-// `;
-
 export default App;

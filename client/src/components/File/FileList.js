@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { Query } from 'react-apollo';
-import { gql } from 'apollo-boost';
+// import { Query } from 'react-apollo';
+// import { gql } from 'apollo-boost';
 import SendToken from './SendToken';
 import UpdateFile from './UpdateFile';
 import DeleteFile from './DeleteFile';
@@ -17,29 +17,14 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
 import { UserContext } from '../../App';
 
 const FileList = ({ dlfiles, classes }) => {
   const currentUser = useContext(UserContext);
-  //console.log(currentUser.id);
-  let userFiles = dlfiles.filter(
-    dlfile => currentUser.id === dlfile.postedBy.id
-  );
-  console.log(userFiles);
-  // const id = match.params.id;
-  //console.log(id);
-  console.log(window);
 
-  // return (
-  //   <Query query={PROFILE_QYERY} variables={{ id }}>
-  //     {({ data, loading, error }) => {
-  //       if (loading) return <Loading />;
-  //       if (error) return <ShowError />;
-  //       console.log({ data });
   return (
     <List>
-      {userFiles.map(dlfile => (
+      {dlfiles.map(dlfile => (
         <ExpansionPanel key={dlfile.id}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <ListItem className={classes.root}>
@@ -89,22 +74,22 @@ const styles = {
   }
 };
 
-const PROFILE_QYERY = gql`
-  query($id: Int!) {
-    user(id: $id) {
-      id
-      username
-      dateJoined
-      dlfileSet {
-        id
-        name
-        description
-        url
-        fileToken
-        tokenSent
-      }
-    }
-  }
-`;
+// const PROFILE_QYERY = gql`
+//   query($id: Int!) {
+//     user(id: $id) {
+//       id
+//       username
+//       dateJoined
+//       dlfileSet {
+//         id
+//         name
+//         description
+//         url
+//         fileToken
+//         tokenSent
+//       }
+//     }
+//   }
+// `;
 
 export default withStyles(styles)(FileList);
