@@ -13,29 +13,15 @@ class DlfileType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
-    dlfiles = graphene.List(
-        DlfileType, 
-        posted_by__id=graphene.Int(required=False), 
-        posted_by__email=graphene.String(required=False),
-        file_token=graphene.String(required=False))
+    dlfiles = graphene.List(DlfileType, search=graphene.String(required=True))
 
-    def resolve_dlfiles(self, info, posted_by__id=None, posted_by__email=None, file_token=None):
-        if posted_by__id or posted_by__email:
-            user = info.context.user
-            if user.is_anonymous:
-                raise GraphQLError('Log in to see the file')
-            
-            if posted_by__id:
-                filter = (Q(posted_by__id__exact=posted_by__id))
-                return Dlfile.objects.filter(filter)
-            elif posted_by__email:
-                filter = (Q(posted_by__email__exact=posted_by__email))
-                return Dlfile.objects.filter(filter)
-        elif file_token:
-            filter = (Q(file_token__exact=file_token))
-            return Dlfile.objects.filter(filter)
-        else:
-            raise GraphQLError('No query variable found!')
+    def resolve_dlfiles(self, info, search):
+        user = info.context.user
+        if user.is_anonymous:
+            raise GraphQLError('Log in to see the file')
+        
+        filter = (Q(posted_by__email__exact=search))
+        return Dlfile.objects.filter(filter)
 
 
 class CreateDlfile(graphene.Mutation):
