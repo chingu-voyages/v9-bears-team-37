@@ -13,14 +13,17 @@ class DlfileType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
-    dlfiles = graphene.List(DlfileType, search=graphene.String(required=True))
+    dlfiles = graphene.List(DlfileType, email=graphene.String(required=True))
 
-    def resolve_dlfiles(self, info, search):
+    def resolve_dlfiles(self, info, email):
         user = info.context.user
         if user.is_anonymous:
             raise GraphQLError('Log in to see the file')
         
-        filter = (Q(posted_by__email__exact=search))
+        if email != user.email:
+            raise GraphQLError('You are not authorized to see the file')
+        
+        filter = (Q(posted_by__email__exact=email))
         return Dlfile.objects.filter(filter)
 
 
