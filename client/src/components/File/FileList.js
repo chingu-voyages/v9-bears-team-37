@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Query } from 'react-apollo';
 import { gql } from 'apollo-boost';
+import SendToken from './SendToken';
 import UpdateFile from './UpdateFile';
 import DeleteFile from './DeleteFile';
 import ShowError from '../Common/ShowError';
@@ -49,14 +50,22 @@ const FileList = ({ dlfiles, classes }) => {
                 }}
                 primary={dlfile.name}
               />
+              <Typography variant='inherit'>
+                token: {dlfile.fileToken}
+              </Typography>
             </ListItem>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails className={classes.details}>
             <Typography variant='body1'>{dlfile.description}</Typography>
           </ExpansionPanelDetails>
           <ExpansionPanelActions>
-            <UpdateFile dlfile={dlfile} />
-            <DeleteFile dlfile={dlfile} />
+            <UpdateFile key={`update-file-${dlfile.id}`} dlfile={dlfile} />
+            <DeleteFile key={`delete-file-${dlfile.id}`} dlfile={dlfile} />
+            <SendToken
+              key={`send-token-${dlfile.id}`}
+              currentUser={currentUser}
+              dlfile={dlfile}
+            />
           </ExpansionPanelActions>
         </ExpansionPanel>
       ))}
@@ -91,6 +100,8 @@ const PROFILE_QYERY = gql`
         name
         description
         url
+        fileToken
+        tokenSent
       }
     }
   }

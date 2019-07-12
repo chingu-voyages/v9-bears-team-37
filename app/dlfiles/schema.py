@@ -1,8 +1,10 @@
 import graphene
+from django.db.models import Q
 from graphene_django import DjangoObjectType
 from graphql import GraphQLError
 
 from .models import Dlfile
+from verification.helpers import generate_token
 
 
 class DlfileType(DjangoObjectType):
@@ -15,7 +17,15 @@ class Query(graphene.ObjectType):
 
     def resolve_dlfiles(self, info, search=None):
         if search:
-            return Dlfile.objects.filter(name__startswith=search)
+            filter = (
+                Q(title__icontains=search) |
+                Q(description__icontains=search) |
+                Q(url__icontains=search) |
+                Q(file_token__icontains=search) |
+                Q(posted_by__username__icontains=search) |
+                Q(posted_by__email__icontains=search)
+            )
+            return Dlfile.objects.filter(filter)
 
         return Dlfile.objects.all()
 
@@ -34,8 +44,10 @@ class CreateDlfile(graphene.Mutation):
         if user.is_anonymous:
             raise GraphQLError('Log in to upload a file')
 
+        file_token = generate_token()
+
         dlfile = Dlfile(name=name, description=description,
-                        url=url, posted_by=user)
+                        url=url, file_token=file_token, posted_by=user)
         dlfile.save()
         return CreateDlfile(dlfile=dlfile)
 
@@ -48,18 +60,26 @@ class UpdateDlfile(graphene.Mutation):
         name = graphene.String()
         description = graphene.String()
         url = graphene.String()
+        token_sent = graphene.Boolean()
 
-    def mutate(self, info, dlfile_id, name, url, description):
+    def mutate(self, info, dlfile_id, name=None, description=None, url=None, token_sent=None):
         user = info.context.user
         dlfile = Dlfile.objects.get(id=dlfile_id)
 
         if dlfile.posted_by != user:
             raise GraphQLError('Not permitted to update this')
 
-        dlfile.name = name
-        dlfile.description = description
-        dlfile.url = url
+        if name:
+            dlfile.name = name
+        if description:
+            dlfile.description = description
+        if url:
+            dlfile.url = url
+        if token_sent:
+            dlfile.token_sent = token_sent
+
         dlfile.save()
+
         return UpdateDlfile(dlfile=dlfile)
 
 

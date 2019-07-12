@@ -19,7 +19,7 @@ const Register = ({ setNewUser }) => {
     createUser();
   };
 
-  const handleSendEmail = (username, email) => {
+  const handleSendVerificationEmail = (username, email) => {
     const payload = { username, email };
 
     if (!mailSent) {
@@ -119,7 +119,7 @@ const Register = ({ setNewUser }) => {
             <Button block onClick={() => setNewUser(false)}>
               Login
             </Button>
-            <Button block onClick={() => handleSendEmail(username, email)}>
+            <Button block onClick={() => handleSendVerificationEmail(username, email)}>
               {mailSent
                 ? 'A verification email has been sent'
                 : 'Send verification email'}

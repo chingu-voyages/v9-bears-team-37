@@ -8,5 +8,7 @@ class Dlfile(models.Model):
     description = models.TextField(blank=True)
     url = models.URLField()
     created_at = models.DateTimeField(auto_now_add=True)
+    file_token = models.CharField(max_length=6, null=True)
+    token_sent = models.BooleanField(default=False)
     posted_by = models.ForeignKey(
         User, null=True, on_delete=models.CASCADE)

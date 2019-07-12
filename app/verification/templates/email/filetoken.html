@@ -13,11 +13,15 @@
         padding: 20px 0;
         text-align: center;
       }
-      .file-title {
+      .file-name {
+        color: #021122;
         font-weight: 400;
       }
+      .file-description {
+        color: #1f5491;
+      }
       .token {
-        font-size: 30px;
+        font-size: 20px;
         font-weight: 600;
         letter-spacing: 1px;
       }
@@ -29,18 +33,21 @@
     </div>
     <div class="main">
       <div>
-        <p>Hello {{ name }},</p>
+        <p>Hello {{ user_name }},</p>
+        <p>You have uploaded a file.</p>
         <p>
-          You have uploaded a file titled
-          <span class="file-title">{{ file_title }}</span> and
+          <b>Name:</b> <span class="file-name">{{ file_name }}</span>
         </p>
-        <p>description: {{ file_description }}.</p>
+        <p>
+          <b>Description:</b>
+          <span class="file-description">{{ file_description }}</span>
+        </p>
         <p>
           To download the file, please, visit the site http://localhost:3000 and
           enter your email id and the following security token.
         </p>
         <p>
-          Security token: <span class="token">{{ token }}</span>
+          Security token: <span class="token">{{ file_token }}</span>
         </p>
       </div>
       <div>

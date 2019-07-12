@@ -1,6 +1,6 @@
-Hello {{ name }}, 
-You have uploaded a file titled {{ file_title }} and description: {{ file_description }}.
+Hello {{ user_name }}, 
+You have uploaded a file named "{{ file_name }}" and description "{{ file_description }}".
 To download the file, please, visit the site http://localhost:3000 and
 enter your email id and the following security token.
-Security token: {{ token }}
+Security token: {{ file_token }}
 Thank you for trying HyperFlashDrive
