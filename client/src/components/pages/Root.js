@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import { Query } from 'react-apollo';
 import { gql } from 'apollo-boost';
 import Header from '../Common/Header';
@@ -8,14 +8,14 @@ import Loading from '../Common/Loading';
 import { UserContext } from '../../App';
 
 const Root = () => {
-  const {email}= useContext(UserContext)
+  const { email } = useContext(UserContext);
 
   return (
     <>
       <Header fixed='top' />
       <div>
         <CreateFile />
-        <Query query={GET_DLFILES_QUERY} variables={{email}}  >
+        <Query query={GET_DLFILES_QUERY} variables={{ email }}>
           {({ data, loading, error }) => {
             if (loading) return <Loading />;
             //if (error) return <ShowError error={error} />;
@@ -31,21 +31,21 @@ const Root = () => {
 };
 
 export const GET_DLFILES_QUERY = gql`
-query getDlFiles($email: String!) {
-  dlfiles(email: $email) {
-    id
-    name
-    description
-    url
-    fileToken
-    tokenSent
-    postedBy {
+  query getDlFiles($email: String!) {
+    dlfiles(email: $email) {
       id
-      username
-      email
+      name
+      description
+      url
+      fileToken
+      tokenSent
+      postedBy {
+        id
+        username
+        email
+      }
     }
   }
-}
 `;
 
 export default Root;

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { Query } from 'react-apollo';
-import { gql } from 'apollo-boost';
+// import { Query } from 'react-apollo';
+// import { gql } from 'apollo-boost';
 import SendToken from './SendToken';
 import UpdateFile from './UpdateFile';
 import DeleteFile from './DeleteFile';
@@ -74,22 +74,22 @@ const styles = {
   }
 };
 
-const PROFILE_QYERY = gql`
-  query($id: Int!) {
-    user(id: $id) {
-      id
-      username
-      dateJoined
-      dlfileSet {
-        id
-        name
-        description
-        url
-        fileToken
-        tokenSent
-      }
-    }
-  }
-`;
+// const PROFILE_QYERY = gql`
+//   query($id: Int!) {
+//     user(id: $id) {
+//       id
+//       username
+//       dateJoined
+//       dlfileSet {
+//         id
+//         name
+//         description
+//         url
+//         fileToken
+//         tokenSent
+//       }
+//     }
+//   }
+// `;
 
 export default withStyles(styles)(FileList);
