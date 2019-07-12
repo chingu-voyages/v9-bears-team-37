@@ -1,5 +1,5 @@
 import graphene
-from django.db.models import Q
+# from django.db.models import Q
 from graphene_django import DjangoObjectType
 from graphql import GraphQLError
 
@@ -14,6 +14,11 @@ class DlfileType(DjangoObjectType):
 
 class Query(graphene.ObjectType):
     dlfiles = graphene.List(DlfileType, email=graphene.String(required=True))
+    dlfile = graphene.Field(
+        DlfileType, 
+        email=graphene.String(required=True), 
+        file_token=graphene.String(required=True)
+        )
 
     def resolve_dlfiles(self, info, email):
         user = info.context.user
@@ -23,8 +28,10 @@ class Query(graphene.ObjectType):
         if email != user.email:
             raise GraphQLError('You are not authorized to see the file')
         
-        filter = (Q(posted_by__email__exact=email))
-        return Dlfile.objects.filter(filter)
+        return Dlfile.objects.filter(posted_by__email=email)
+    
+    def resolve_dlfile(self, info, email, file_token):
+        return Dlfile.objects.filter(posted_by__email=email, file_token=file_token)
 
 
 class CreateDlfile(graphene.Mutation):
@@ -51,6 +58,7 @@ class CreateDlfile(graphene.Mutation):
 
 class UpdateDlfile(graphene.Mutation):
     dlfile = graphene.Field(DlfileType)
+
 
     class Arguments:
         dlfile_id = graphene.Int(required=True)
