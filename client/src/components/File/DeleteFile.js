@@ -4,7 +4,6 @@ import { Mutation } from 'react-apollo';
 import { gql } from 'apollo-boost';
 import { Button } from 'react-bootstrap';
 import { GET_DLFILES_QUERY } from '../pages/Root';
-// import { PROFILE_QYERY } from '../pages/Root';
 
 const DeleteFile = ({ dlfile }) => {
   const currentUser = useContext(UserContext);
@@ -23,7 +22,7 @@ const DeleteFile = ({ dlfile }) => {
       >
         {deleteDlfile => (
           <>
-            <Button variant='danger' onClick={deleteDlfile}>
+            <Button variant="danger" onClick={deleteDlfile}>
               Delete
             </Button>
           </>

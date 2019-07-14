@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Mutation } from 'react-apollo';
 import { gql } from 'apollo-boost';
-import Loading from '../Common/Loading';
-import ShowError from '../Common/ShowError';
 import Button from '@material-ui/core/Button';
 
 const Confirm = props => {
@@ -12,7 +10,7 @@ const Confirm = props => {
 
   const renderReidrect = () => {
     if (redirect) {
-      return <Redirect to='/' />;
+      return <Redirect to="/" />;
     }
   };
 
@@ -44,8 +42,8 @@ const Confirm = props => {
           return (
             <Button
               fullWidth
-              variant='outlined'
-              color='primary'
+              variant="outlined"
+              color="primary"
               onClick={event => handleConfirmEmail(event, updateUser)}
             >
               Verify your email

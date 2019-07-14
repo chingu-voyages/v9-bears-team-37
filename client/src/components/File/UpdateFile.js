@@ -1,17 +1,12 @@
 import React, { useState, useContext } from 'react';
-// import { Button, Toast, Form, Row, Col } from 'react-bootstrap';
 import { Mutation } from 'react-apollo';
 import { gql } from 'apollo-boost';
 import axios from 'axios';
 import { UserContext } from '../../App';
-// import { GET_DLFILES_QUERY } from '../pages/Root';
-import { PROFILE_QYERY } from '../pages/Root';
 
 import ShowError from '../Common/ShowError';
 
 import withStyles from '@material-ui/core/styles/withStyles';
-import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -118,8 +113,8 @@ const UpdateFile = ({ dlfile, classes }) => {
                     </DialogContentText>
                     <FormControl fullWidth>
                       <TextField
-                        label='Title'
-                        placeholder='Add Title'
+                        label="Title"
+                        placeholder="Add Title"
                         onChange={event => setName(event.target.value)}
                         value={name}
                         className={classes.textField}
@@ -128,9 +123,9 @@ const UpdateFile = ({ dlfile, classes }) => {
                     <FormControl fullWidth>
                       <TextField
                         multiline
-                        rows='4'
-                        label='Description'
-                        placeholder='Add Description'
+                        rows="4"
+                        label="Description"
+                        placeholder="Add Description"
                         onChange={event => setDescription(event.target.value)}
                         value={description}
                         className={classes.textField}
@@ -138,18 +133,18 @@ const UpdateFile = ({ dlfile, classes }) => {
                     </FormControl>
                     <FormControl error={Boolean(sizeError)}>
                       <input
-                        id='audio'
+                        id="audio"
                         required
-                        type='file'
+                        type="file"
                         //accept="audio/mp3,audio/wav"
                         className={classes.input}
                         onChange={handleFileupload}
                       />
-                      <label htmlFor='audio'>
+                      <label htmlFor="audio">
                         <Button
-                          variant='outlined'
+                          variant="outlined"
                           color={file ? 'secondary' : 'inherit'}
-                          component='span'
+                          component="span"
                           className={classes.button}
                         >
                           File
@@ -175,7 +170,7 @@ const UpdateFile = ({ dlfile, classes }) => {
                         !description.trim() ||
                         !file
                       }
-                      type='submit'
+                      type="submit"
                       className={classes.save}
                     >
                       {submitting ? (

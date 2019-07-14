@@ -5,7 +5,6 @@ import Signout from '../Authentications/Signout';
 import withStyles from '@material-ui/core/styles/withStyles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import UploadIcon from '@material-ui/icons/CloudUploadTwoTone';
 import FaceIcon from '@material-ui/icons/FaceTwoTone';
 import Typography from '@material-ui/core/Typography';
 
@@ -13,21 +12,13 @@ const Header = ({ classes }) => {
   const currentUser = useContext(UserContext);
 
   return (
-    <AppBar position='static' className={classes.root}>
+    <AppBar position="static" className={classes.root}>
       <Toolbar>
-        {/* Title / Logo */}
-        <Link to='/' className={classes.grow}>
-          <UploadIcon className={classes.logo} color='secondary' />
-          <Typography variant='subtitle1' color='secondary' noWrap>
-            Upload
-          </Typography>
-        </Link>
-
         {/* Auth User Info */}
         {
           <Link to={`/`} className={classes.grow}>
             <FaceIcon className={classes.faceIcon} />
-            <Typography variant='subtitle2' className={classes.username} noWrap>
+            <Typography variant="subtitle2" className={classes.username} noWrap>
               {currentUser.username}
             </Typography>
           </Link>
