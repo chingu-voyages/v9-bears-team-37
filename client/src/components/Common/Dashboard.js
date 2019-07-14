@@ -20,7 +20,6 @@ import Paper from '@material-ui/core/Paper';
 const DashBoard = () => {
   const ref = useRef();
   const ref1 = useRef();
-  console.log(ref.current, ref1.current);
   const [email, setEmail] = useState('');
   const [fileToken, setFileToken] = useState('');
   const handleSubmit = e => {
@@ -30,23 +29,23 @@ const DashBoard = () => {
   };
   return (
     <Paper>
-      <AppBar position="static" color="default" style={{ boxShadow: 'none' }}>
+      <AppBar position='static' color='default' style={{ boxShadow: 'none' }}>
         <Toolbar>
-          <Typography variant="h6" color="inherit">
+          <Typography variant='h6' color='inherit'>
             Created By
           </Typography>
           <Button
             style={{ float: 'right' }}
-            color="inherit"
-            target="_blank"
-            href="https://github.com/picklu"
+            color='inherit'
+            target='_blank'
+            href='https://github.com/picklu'
           >
             Picklu
           </Button>
           <Button
-            color="inherit"
-            target="_blank"
-            href="https://github.com/iNightElf"
+            color='inherit'
+            target='_blank'
+            href='https://github.com/iNightElf'
           >
             Shahzad
           </Button>
@@ -58,9 +57,9 @@ const DashBoard = () => {
           <DialogContentText>Type your Email and Token</DialogContentText>
           <FormControl fullWidth>
             <input
-              type="email"
-              name="email"
-              placeholder="Enter Email..."
+              type='email'
+              name='email'
+              placeholder='Enter Email...'
               ref={ref}
               style={{
                 display: 'inline-block',
@@ -80,9 +79,9 @@ const DashBoard = () => {
           <br />
           <FormControl fullWidth>
             <input
-              type="text"
-              name="token"
-              placeholder="Enter token..."
+              type='text'
+              name='token'
+              placeholder='Enter token...'
               ref={ref1}
               style={{
                 display: 'inline-block',
@@ -102,8 +101,8 @@ const DashBoard = () => {
           <br />
           <FormControl>
             <input
-              type="submit"
-              value="Search"
+              type='submit'
+              value='Search'
               style={{
                 borderRadius: '3px',
                 border: 'none',
@@ -136,7 +135,7 @@ const DashBoard = () => {
                       }}
                       primary={data.dlfile.name}
                     />
-                    <Typography variant="inherit">
+                    <Typography variant='inherit'>
                       <Button>
                         <a href={data.dlfile.url} download>
                           Download

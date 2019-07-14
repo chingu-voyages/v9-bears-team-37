@@ -101,8 +101,8 @@ const CreateFile = ({ classes }) => {
       {!reveal && (
         <Button
           fullWidth
-          variant="outlined"
-          color="primary"
+          variant='outlined'
+          color='primary'
           onClick={() => setReveal(true)}
           disabled={!currentUser.isVerified}
         >
@@ -115,7 +115,7 @@ const CreateFile = ({ classes }) => {
         <Button
           fullWidth
           variant={mailSent ? 'contained' : 'outlined'}
-          color="primary"
+          color='primary'
           onClick={() =>
             handleSendEmail(currentUser.username, currentUser.email)
           }
@@ -128,7 +128,6 @@ const CreateFile = ({ classes }) => {
       <Mutation
         mutation={CREATE_DLFILE_MUTATION}
         onCompleted={data => {
-          console.log({ data });
           setSubmitting(false);
           setReveal(false);
           setName('');
@@ -152,8 +151,8 @@ const CreateFile = ({ classes }) => {
                   </DialogContentText>
                   <FormControl fullWidth>
                     <TextField
-                      label="Title"
-                      placeholder="Add Title"
+                      label='Title'
+                      placeholder='Add Title'
                       onChange={event => setName(event.target.value)}
                       value={name}
                       className={classes.textField}
@@ -162,9 +161,9 @@ const CreateFile = ({ classes }) => {
                   <FormControl fullWidth>
                     <TextField
                       multiline
-                      rows="4"
-                      label="Description"
-                      placeholder="Add Description"
+                      rows='4'
+                      label='Description'
+                      placeholder='Add Description'
                       onChange={event => setDescription(event.target.value)}
                       value={description}
                       className={classes.textField}
@@ -172,17 +171,17 @@ const CreateFile = ({ classes }) => {
                   </FormControl>
                   <FormControl error={Boolean(sizeError)}>
                     <input
-                      id="audio"
+                      id='audio'
                       required
-                      type="file"
+                      type='file'
                       className={classes.input}
                       onChange={handleFileupload}
                     />
-                    <label htmlFor="audio">
+                    <label htmlFor='audio'>
                       <Button
-                        variant="outlined"
+                        variant='outlined'
                         color={file ? 'secondary' : 'inherit'}
-                        component="span"
+                        component='span'
                         className={classes.button}
                       >
                         File
@@ -205,7 +204,7 @@ const CreateFile = ({ classes }) => {
                     disabled={
                       submitting || !name.trim() || !description.trim() || !file
                     }
-                    type="submit"
+                    type='submit'
                     className={classes.save}
                   >
                     {submitting ? (

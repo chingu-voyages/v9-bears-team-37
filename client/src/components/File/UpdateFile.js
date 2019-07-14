@@ -20,7 +20,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 
 const UpdateFile = ({ dlfile, classes }) => {
-  console.log({ dlfile });
   const currentUser = useContext(UserContext);
   const [reveal, setReveal] = useState(false);
   const [name, setName] = useState(dlfile.name);
@@ -40,8 +39,6 @@ const UpdateFile = ({ dlfile, classes }) => {
       setSizeError('');
     }
     //setFile(selectedFile);
-    console.log(file);
-    console.log(name, description);
   };
 
   const handleFile = async () => {
@@ -91,8 +88,7 @@ const UpdateFile = ({ dlfile, classes }) => {
         </Button>
         <Mutation
           mutation={UPDATE_DLFILE_MUTATION}
-          onCompleted={data => {
-            console.log({ data });
+          onCompleted={() => {
             setSubmitting(false);
             setReveal(false);
             setName('');
@@ -113,8 +109,8 @@ const UpdateFile = ({ dlfile, classes }) => {
                     </DialogContentText>
                     <FormControl fullWidth>
                       <TextField
-                        label="Title"
-                        placeholder="Add Title"
+                        label='Title'
+                        placeholder='Add Title'
                         onChange={event => setName(event.target.value)}
                         value={name}
                         className={classes.textField}
@@ -123,9 +119,9 @@ const UpdateFile = ({ dlfile, classes }) => {
                     <FormControl fullWidth>
                       <TextField
                         multiline
-                        rows="4"
-                        label="Description"
-                        placeholder="Add Description"
+                        rows='4'
+                        label='Description'
+                        placeholder='Add Description'
                         onChange={event => setDescription(event.target.value)}
                         value={description}
                         className={classes.textField}
@@ -133,18 +129,18 @@ const UpdateFile = ({ dlfile, classes }) => {
                     </FormControl>
                     <FormControl error={Boolean(sizeError)}>
                       <input
-                        id="audio"
+                        id='audio'
                         required
-                        type="file"
+                        type='file'
                         //accept="audio/mp3,audio/wav"
                         className={classes.input}
                         onChange={handleFileupload}
                       />
-                      <label htmlFor="audio">
+                      <label htmlFor='audio'>
                         <Button
-                          variant="outlined"
+                          variant='outlined'
                           color={file ? 'secondary' : 'inherit'}
-                          component="span"
+                          component='span'
                           className={classes.button}
                         >
                           File
@@ -170,7 +166,7 @@ const UpdateFile = ({ dlfile, classes }) => {
                         !description.trim() ||
                         !file
                       }
-                      type="submit"
+                      type='submit'
                       className={classes.save}
                     >
                       {submitting ? (

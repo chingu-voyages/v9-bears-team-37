@@ -6,13 +6,12 @@ const Signout = () => {
   const handleSignOut = client => {
     localStorage.removeItem('authToken');
     client.writeData({ data: { isLoggedIn: false } });
-    console.log('User Signed out', client);
   };
 
   return (
     <ApolloConsumer>
       {client => (
-        <Button onClick={() => handleSignOut(client)} variant="danger">
+        <Button onClick={() => handleSignOut(client)} variant='danger'>
           Sign Out
         </Button>
       )}
