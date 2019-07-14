@@ -16,7 +16,6 @@ const App = ({ currentUser }) => (
       if (loading) return <Loading />;
       if (error) return <ShowError error={error} />;
       const currentUser = data.me;
-      // console.log(currentUser);
 
       return (
         <Router>

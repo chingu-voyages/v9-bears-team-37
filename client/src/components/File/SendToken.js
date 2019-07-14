@@ -33,8 +33,7 @@ const SendToken = ({ currentUser, dlfile }) => {
   return (
     <Mutation
       mutation={UPDATE_DLFILE_MUTATION}
-      onCompleted={data => {
-        console.log(data);
+      onCompleted={() => {
         setTokenSent(true);
       }}
     >

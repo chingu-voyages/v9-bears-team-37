@@ -13,8 +13,8 @@ const DeleteFile = ({ dlfile }) => {
       <Mutation
         mutation={DELETE_FILE_MUTATION}
         variables={{ dlfileId: dlfile.id }}
-        onCompleted={data => {
-          console.log(data);
+        onCompleted={() => {
+          console.log('data fetched!');
         }}
         refetchQueries={() => [
           { query: GET_DLFILES_QUERY, variables: { email: currentUser.email } }
@@ -22,7 +22,7 @@ const DeleteFile = ({ dlfile }) => {
       >
         {deleteDlfile => (
           <>
-            <Button variant="danger" onClick={deleteDlfile}>
+            <Button variant='danger' onClick={deleteDlfile}>
               Delete
             </Button>
           </>

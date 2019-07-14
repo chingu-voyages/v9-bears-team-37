@@ -10,7 +10,7 @@ const Confirm = props => {
 
   const renderReidrect = () => {
     if (redirect) {
-      return <Redirect to="/" />;
+      return <Redirect to='/' />;
     }
   };
 
@@ -26,8 +26,8 @@ const Confirm = props => {
       <Mutation
         mutation={CONFIRM_EMAIL_QUERY}
         variables={{ userId: id, isVerified: true }}
-        onCompleted={data => {
-          console.log({ data });
+        onCompleted={() => {
+          // console.log();
         }}
         onError={error => console.log(error)}
       >
@@ -42,8 +42,8 @@ const Confirm = props => {
           return (
             <Button
               fullWidth
-              variant="outlined"
-              color="primary"
+              variant='outlined'
+              color='primary'
               onClick={event => handleConfirmEmail(event, updateUser)}
             >
               Verify your email
