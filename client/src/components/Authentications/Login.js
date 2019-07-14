@@ -11,9 +11,13 @@ const Login = ({ classes, setNewUser }) => {
 
   const handleSubmit = async (e, authToken, client) => {
     e.preventDefault();
-    const res = await authToken();
-    localStorage.setItem('authToken', res.data.tokenAuth.token);
-    client.writeData({ data: { isLoggedIn: true } });
+    try {
+      const res = await authToken();
+      localStorage.setItem('authToken', res.data.tokenAuth.token);
+      client.writeData({ data: { isLoggedIn: true } });
+    } catch (error) {
+      console.log('Invalid username or password!');
+    }
   };
 
   return (
@@ -32,33 +36,36 @@ const Login = ({ classes, setNewUser }) => {
                 onSubmit={e => handleSubmit(e, authToken, client)}
                 style={{ marginLeft: '1rem' }}
               >
-                <Form.Group controlId="formBasicEmail">
+                <Form.Group controlId='formBasicEmail'>
                   <Form.Label>User Name</Form.Label>
                   <Form.Control
                     //id="name"
-                    type="text"
-                    placeholder="Enter User Name"
+                    type='text'
+                    placeholder='Enter User Name'
                     onChange={e => setUsername(e.target.value)}
                   />
                 </Form.Group>
 
-                <Form.Group controlId="formBasicPassword">
+                <Form.Group controlId='formBasicPassword'>
                   <Form.Label>Password</Form.Label>
                   <Form.Control
                     //id="password"
-                    type="password"
-                    placeholder="Password"
+                    type='password'
+                    placeholder='Password'
                     onChange={e => setPassword(e.target.value)}
                   />
                 </Form.Group>
                 <Button
-                  variant="primary"
-                  type="submit"
+                  variant='primary'
+                  type='submit'
                   block
                   disabled={loading || !username.trim() || !password.trim()}
                 >
                   {loading ? 'Login...Please wait' : 'Login'}
                 </Button>
+                {error && (
+                  <Error error={{ message: 'Invalid username or password!' }} />
+                )}
                 <Button
                   block
                   onClick={() => setNewUser(true)}
@@ -71,7 +78,6 @@ const Login = ({ classes, setNewUser }) => {
                 >
                   <u>New User? Register here</u>
                 </Button>
-                {error && <Error error={error} />}
               </Form>
             );
           }}
