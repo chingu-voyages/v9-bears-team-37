@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { Toast, Button } from 'react-bootstrap';
+import Dialog from '@material-ui/core/Dialog';
 
 const ShowError = ({ error }) => {
   const [show, setShow] = useState(true);
   return (
-    <Toast show={show} variant="danger">
-      <Toast.Body varient={'danger'}>{error.message}</Toast.Body>
+    <Dialog open={show} variant="danger">
+      <Toast.Body varient={'danger'}>
+        Please submit valid Username and Email
+      </Toast.Body>
       <div className="d-flex justify-content-end">
         <Button onClick={() => setShow(false)} variant="outline-success">
-          Close me ya'll!
+          Close
         </Button>
       </div>
-    </Toast>
+    </Dialog>
   );
 };
 

@@ -8,7 +8,6 @@ import ApolloClient, { gql } from 'apollo-boost';
 import Dashboard from './components/Common/Dashboard';
 import Auth from './components/Authentications';
 import { GRAPHQL_API_URL } from './config';
-import { GET_DLFILES_QUERY } from './components/pages/Root';
 
 import { Container, Row, Col } from 'react-bootstrap';
 
@@ -35,17 +34,6 @@ const client = new ApolloClient({
 const IS_LOGGED_IN_QUERY = gql`
   query {
     isLoggedIn @client
-  }
-`;
-
-const GET_DLFILE_QUERY = gql`
-  query getDownloadFile($email: String!, $fileToken: String!) {
-    dlfile(email: $email, fileToken: $fileToken) {
-      id
-      name
-      description
-      url
-    }
   }
 `;
 

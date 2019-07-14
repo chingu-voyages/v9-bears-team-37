@@ -4,8 +4,6 @@ import { gql } from 'apollo-boost';
 import { FILE_TOKEN_ENDPOINT } from '../../config';
 import { sendEmail } from '../../helpers';
 import ShowError from '../Common/ShowError';
-import Loading from '../Common/Loading';
-import withStyles from '@material-ui/core/styles/withStyles';
 import Button from '@material-ui/core/Button';
 
 const SendToken = ({ currentUser, dlfile }) => {
