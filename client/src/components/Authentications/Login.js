@@ -16,7 +16,7 @@ const Login = ({ classes, setNewUser }) => {
       localStorage.setItem('authToken', res.data.tokenAuth.token);
       client.writeData({ data: { isLoggedIn: true } });
     } catch (error) {
-      console.log('Invalid username or password!');
+      return null;
     }
   };
 
