@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Mutation } from 'react-apollo';
 import { gql } from 'apollo-boost';
-import { Card, Form, Button, Alert, Toast } from 'react-bootstrap';
+import { Card, Form, Button } from 'react-bootstrap';
 import Error from '../Common/ShowError';
+import Paper from '@material-ui/core/Paper';
 
 const Login = ({ classes, setNewUser }) => {
   const [username, setUsername] = useState('');
@@ -16,9 +17,8 @@ const Login = ({ classes, setNewUser }) => {
   };
 
   return (
-    <div>
+    <Paper>
       <Card style={{ width: '18rem', border: 'none' }}>
-        <Card.Img variant='top' src='holder.js/100px180' />
         <Card.Body>
           <Card.Title>
             <h3>Login</h3>
@@ -28,29 +28,32 @@ const Login = ({ classes, setNewUser }) => {
         <Mutation mutation={LOGIN_MUTATION} variables={{ username, password }}>
           {(authToken, { loading, error, called, client }) => {
             return (
-              <Form onSubmit={e => handleSubmit(e, authToken, client)}>
-                <Form.Group controlId='formBasicEmail'>
+              <Form
+                onSubmit={e => handleSubmit(e, authToken, client)}
+                style={{ marginLeft: '1rem' }}
+              >
+                <Form.Group controlId="formBasicEmail">
                   <Form.Label>User Name</Form.Label>
                   <Form.Control
                     //id="name"
-                    type='text'
-                    placeholder='Enter User Name'
+                    type="text"
+                    placeholder="Enter User Name"
                     onChange={e => setUsername(e.target.value)}
                   />
                 </Form.Group>
 
-                <Form.Group controlId='formBasicPassword'>
+                <Form.Group controlId="formBasicPassword">
                   <Form.Label>Password</Form.Label>
                   <Form.Control
                     //id="password"
-                    type='password'
-                    placeholder='Password'
+                    type="password"
+                    placeholder="Password"
                     onChange={e => setPassword(e.target.value)}
                   />
                 </Form.Group>
                 <Button
-                  variant='primary'
-                  type='submit'
+                  variant="primary"
+                  type="submit"
                   block
                   disabled={loading || !username.trim() || !password.trim()}
                 >
@@ -66,7 +69,7 @@ const Login = ({ classes, setNewUser }) => {
                     textAlign: 'center'
                   }}
                 >
-                  New User? Register here
+                  <u>New User? Register here</u>
                 </Button>
                 {error && <Error error={error} />}
               </Form>
@@ -74,7 +77,7 @@ const Login = ({ classes, setNewUser }) => {
           }}
         </Mutation>
       </Card>
-    </div>
+    </Paper>
   );
 };
 

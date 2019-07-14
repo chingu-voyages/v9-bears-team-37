@@ -1,14 +1,10 @@
 import React, { useContext } from 'react';
-// import { Query } from 'react-apollo';
-// import { gql } from 'apollo-boost';
 import SendToken from './SendToken';
 import UpdateFile from './UpdateFile';
 import DeleteFile from './DeleteFile';
-import ShowError from '../Common/ShowError';
-import Loading from '../Common/Loading';
+
 import withStyles from '@material-ui/core/styles/withStyles';
 import List from '@material-ui/core/List';
-import { Link } from 'react-router-dom';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
@@ -35,13 +31,13 @@ const FileList = ({ dlfiles, classes }) => {
                 }}
                 primary={dlfile.name}
               />
-              <Typography variant='inherit'>
+              <Typography variant="inherit">
                 token: {dlfile.fileToken}
               </Typography>
             </ListItem>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails className={classes.details}>
-            <Typography variant='body1'>{dlfile.description}</Typography>
+            <Typography variant="body1">{dlfile.description}</Typography>
           </ExpansionPanelDetails>
           <ExpansionPanelActions>
             <UpdateFile key={`update-file-${dlfile.id}`} dlfile={dlfile} />
